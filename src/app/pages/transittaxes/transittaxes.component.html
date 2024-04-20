@@ -1,0 +1,162 @@
+<p-panel header="Modulo Consultas"  class="body-content">
+    <div class="grid m-2">
+        <!-- <p-tabView (onChange)="tabviewChange()">
+            <p-tabPanel header="Patente o Rol MOP">
+                <app-formpatentrol-transittaxes
+                    (data) = "listTransitTaxes($event)"
+                ></app-formpatentrol-transittaxes>
+            </p-tabPanel>
+            <p-tabPanel header="Busqueda Generica">
+                <app-formall-transittaxes
+                    (data) = "listTransitTaxes($event)"
+                ></app-formall-transittaxes>
+            </p-tabPanel>
+        </p-tabView> -->
+
+        <div class="grid formgrid">
+            <div class="col-12 md:col-4">
+                <div class="field-checkbox">
+                    <p-inputSwitch
+                        [(ngModel)]="pending"
+                        (onChange)="changeValueStatus('pending')"
+                    ></p-inputSwitch>
+                    <label for="ny">Pendientes</label>
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="field-checkbox">
+                    <p-inputSwitch
+                        [(ngModel)]="paid"
+                        (onChange)="changeValueStatus('paid')"
+                    ></p-inputSwitch>
+                    <label for="sf">Pagados</label>
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="field-checkbox">
+                    <p-inputSwitch
+                        [(ngModel)]="acquitted"
+                        (onChange)="changeValueStatus('acquitted')"
+                    ></p-inputSwitch>
+                    <label for="la">Absueltas</label>
+                </div>
+            </div>
+            <div class="col-12 md:col-4">
+                <div class="field-checkbox">
+                    <p-inputSwitch
+                        [(ngModel)]="failedRMNP"
+                        (onChange)="changeValueStatus('failedRMNP')"
+                    ></p-inputSwitch>
+                    <label for="la">R.M.N.P</label>
+                </div>
+            </div>
+            <div class="col-12 md:col-3">
+                <div class="field-checkbox">
+                    <p-inputSwitch
+                        [(ngModel)]="allstatus"
+                        (onChange)="changeValueStatus('allstatus')"
+                    ></p-inputSwitch>
+                    <label for="la">Todos</label>
+                </div>
+            </div>
+        </div>
+        <form
+            [formGroup]="formpatentrole"
+            (ngSubmit)="onSave()"
+            autocomplete="off"
+        >
+            <div class="card p-fluid">
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <label class="mr-2">Ingrese Patente</label>
+                        <small id="username-help" class="p-error"
+                            >*(respetar formato de consulta)</small
+                        >
+                        <input
+                            pInputText
+                            formControlName="patent"
+                            type="text"
+                            maxlength="7"
+                            placeholder="****-99"
+                        />
+                    </div>
+                    <div class="field col">
+                        <label class="mr-2">Ingrese Rol-MOP</label>
+                        <small id="username-help" class="p-error"
+                            >*(respetar formato de consulta)</small
+                        >
+                        <input
+                            pInputText
+                            formControlName="role"
+                            type="text"
+                            maxlength="12"
+                            placeholder="********-AAA"
+                        />
+                    </div>
+                </div>
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <label class="mr-2">Ingrese RUT</label>
+                        <input
+                            pInputText
+                            formControlName="rut"
+                            type="text"
+                            placeholder="99999999-*"
+                        />
+                    </div>
+                    <div class="field col">
+                        <label class="mr-2">Ingrese Nombre</label>
+                        <input
+                            pInputText
+                            formControlName="nombres"
+                            type="text"
+
+                        />
+                    </div>
+                </div>
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <label class="mr-2">Ingrese Apellido Paterno</label>
+                        <input
+                            pInputText
+                            formControlName="apellido_paterno"
+                            type="text"
+
+                        />
+                    </div>
+                    <div class="field col">
+                        <label class="mr-2">Ingrese Apellido Materno</label>
+                        <input
+                            pInputText
+                            formControlName="apellido_materno"
+                            type="text"
+
+                        />
+                    </div>
+                </div>
+            </div>
+            <br />
+            <button
+                type="submit"
+                pButton
+                pRipple
+                label="Consultar"
+                class="p-button-rounded mr-2 mb-2"
+            ></button>
+        </form>
+        <br />
+        <p-messages
+            [(value)]="messages"
+            [enableService]="false"
+            [closable]="true"
+        ></p-messages>
+    </div>
+    <div *ngIf="data && showList">
+        @defer{
+            <app-list-transit-taxes
+                [data]="data"
+            ></app-list-transit-taxes>
+        }
+
+    </div>
+</p-panel>

@@ -1,0 +1,60 @@
+<div class="grid formgrid">
+    <form
+        [formGroup]="form"
+        (ngSubmit)="onSave()"
+    >
+        <div class="card col-12">
+            <div class="p-formgrid grid  m-4">
+                <div class="field col-12">
+                    <label class="mr-2">Fecha</label>
+                    <small id="username-help" class="p-error"
+                        >*</small
+                    >
+                    <p-calendar formControlName="fecha" dateFormat="dd-mm-yy"></p-calendar>
+                </div>
+                <div class="field col-12">
+                    <label class="mr-2">Razon</label>
+                    <small id="username-help" class="p-error"
+                        >*</small
+                    >
+                    <p-dropdown formControlName="reason"
+                        [options]="listReasons"
+                        optionLabel="descripcion"
+                        dataKey="descripcion"
+                        >
+                        <ng-template let-reason pTemplate="option">
+                            {{ reason.nombre }} - {{ reason.descripcion }}
+                        </ng-template>
+                    </p-dropdown>
+                </div>
+
+                <div class="field col-12">
+                    <label class="mr-2">Observacción</label>
+                    <small id="username-help" class="p-error"
+                        >*</small
+                    >
+                    <textarea
+                        rows="5"
+                        cols="30"
+                        pInputTextarea
+                        formControlName="observacion">
+                    </textarea>
+                </div>
+            </div>
+            <br />
+            <button
+                type="submit"
+                pButton
+                pRipple
+                label="Consultar"
+                class="p-button-rounded mr-2 mb-2"
+            ></button>
+        </div>
+    </form>
+    <br />
+    <!-- <p-messages
+        [(value)]="messages"
+        [enableService]="false"
+        [closable]="true"
+    ></p-messages> -->
+</div>

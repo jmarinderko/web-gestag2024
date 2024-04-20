@@ -1,0 +1,36 @@
+<div>
+    <form
+        [formGroup]="form"
+        (ngSubmit)="onSave()"
+        autocomplete="off"
+    >
+        <div class="card p-fluid">
+            <div class="p-formgrid grid">
+                <div class="field col">
+                    <label class="mr-2">Ingrese Folio</label>
+                    <input
+                        pInputText
+                        formControlName="folio"
+                        type="text"
+                    />
+                </div>
+                <div class="field col">
+                    <label class="mr-2">Ingrese Orden de Pago</label>
+                    <input
+                        pInputText
+                        formControlName="orden_pago"
+                        type="text"
+                    />
+                </div>
+            </div>
+        </div>
+        <br />
+        <button
+            type="submit"
+            pButton
+            pRipple
+            label="Consultar"
+            class="p-button-rounded mr-2 mb-2"
+        ></button>
+    </form>
+</div>

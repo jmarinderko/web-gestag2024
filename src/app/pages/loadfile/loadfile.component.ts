@@ -1,0 +1,53 @@
+import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { PanelModule } from 'primeng/panel';
+import { ButtonModule } from 'primeng/button';
+import { DialogModule } from 'primeng/dialog';
+import { TableModule } from 'primeng/table';
+import { DividerModule } from 'primeng/divider';
+import { LoadFileService } from 'src/app/services/loadfile.service';
+import { StatusLoadFilePipe } from 'src/app/shared/pipe/statusLoadFile.pipe';
+import { NewloadfileComponent } from './components/new/newloadfile.component';
+;
+
+@Component({
+    selector: 'app-loadfile',
+    standalone: true,
+    imports: [
+        CommonModule,
+        PanelModule,
+        ButtonModule,
+        DialogModule,
+        TableModule,
+        DividerModule,
+        StatusLoadFilePipe,
+        NewloadfileComponent,
+    ],
+    templateUrl: './loadfile.component.html',
+    styleUrl: './loadfile.component.scss',
+    // changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class LoadfileComponent implements OnInit {
+    files: any[] = [];
+    fileSelected: any = null;
+    showLoad: boolean = false;
+    loadFileService = inject(LoadFileService);
+
+    constructor() {}
+
+    ngOnInit() {
+        this.loadFileService.getloadFile().subscribe((res) => {
+            this.files = res.data;
+        });
+    }
+
+    newFile() {
+        this.fileSelected = null;
+        this.showLoad = true;
+    }
+
+    editFile(file: any) {
+        this.fileSelected = file;
+        this.showLoad = true;
+    }
+}

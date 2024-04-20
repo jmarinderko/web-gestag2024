@@ -1,0 +1,33 @@
+<div class="grid col-12">
+    <div class="card col-12">
+        <h5>Información de Pago</h5>
+        <p class="mb-2">
+            Folio: <span class="text-green-500 font-medium">{{ transittaxes.pay?.folio}}</span>
+        </p>
+        <p class="mb-2">
+            Orden de Pago: <span class="text-green-500 font-medium">{{ transittaxes.pay?.orden_pago}}</span>
+        </p>
+        <p class="mb-2">
+            Fecha de Pago: <span class="text-green-500 font-medium">{{ transittaxes.pay?.fecha_pago | date: "dd/MM/YYYY"}}</span>
+        </p>
+        <p class="mb-2">
+            Caja de Pago N°: <span class="text-green-500 font-medium">{{ paymentBox?.numero_caja }}</span>
+        </p>
+        <p class="mb-2">
+            Porcentaje de descuento: <span class="text-green-500 font-medium">{{ transittaxes.pay?.porcentaje_descuento}}</span>
+        </p>
+        <p class="mb-2">
+            Valor Descuento: <span class="text-green-500 font-medium">{{ transittaxes.pay?.valor_descuento | currencyCl }}</span>
+        </p>
+        <p class="mb-2">
+            Valor UTM: <span class="text-green-500 font-medium">{{ transittaxes.pay?.valor_utm | currencyCl }}</span>
+        </p>
+        <p class="mb-2">
+            Valor Pago: <span class="text-green-500 font-medium">{{ transittaxes.pay?.valor_pago | currencyCl }}</span>
+        </p>
+        <p class="mb-2">
+            Tipo de Pago: <span class="text-green-500 font-medium">{{ reason?.nombre}} {{ reason?.descripcion}}</span>
+        </p>
+
+    </div>
+</div>

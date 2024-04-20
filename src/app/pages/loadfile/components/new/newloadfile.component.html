@@ -1,0 +1,54 @@
+<div class="grid col-12">
+    <div class="card col-12">
+        <form
+            [formGroup]="form"
+            (ngSubmit)="onSave()"
+            autocomplete="off"
+            enctype="multipart/form-data"
+        >
+            <div class="card p-fluid">
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <label class="mr-2">Seleccione Autopista</label>
+                        <p-dropdown formControlName="highway" [options]="highways" optionLabel="nombre" placeholder="Seleccionar Autopista"></p-dropdown>
+                    </div>
+                    <div class="field col">
+                        <label class="mr-2">Nombre Archivo</label>
+                        <input
+                            pInputText
+                            formControlName="name"
+                            type="text"
+                        />
+                    </div>
+                </div>
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <label class="mr-2">Número de Archivo</label>
+                        <input
+                            pInputText
+                            formControlName="number"
+                        />
+                    </div>
+                    <div class="field col">
+                        <label for="file">Archivo TXT:</label>
+                        <p-fileUpload
+                            mode="basic"
+                            name="file"
+                            (onUpload)="onUpload($event)"
+                            [auto]="true"
+                            chooseLabel="Cargar">
+                        </p-fileUpload>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <button
+                type="submit"
+                pButton
+                pRipple
+                label="Enviar"
+                class="p-button-rounded mr-2 mb-2"
+            ></button>
+        </form>
+    </div>
+</div>

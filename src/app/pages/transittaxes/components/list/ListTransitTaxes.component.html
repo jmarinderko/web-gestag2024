@@ -1,0 +1,201 @@
+
+<p-divider align="center" type="dotted">
+    <p-chip class="m-3">Resultado</p-chip>
+</p-divider>
+@if(list.length > 0){
+    <div class="card mb-2">
+        <div class="flex justify-content-between mb-3" style="width: 100%;">
+            <div>
+                <span class="block text-blue-600 font-medium mb-3 text-xl">Resumen</span>
+                <div class="text-blue-600 font-large mb-1">Nombre:
+                    <span class="text-green-500 font-medium">{{ info.nombres }} {{info.apellido_paterno}} {{info.apellido_materno}}</span>
+                </div>
+                <div class="text-blue-600 font-large mb-1">RUT:
+                    <span class="text-green-500 font-medium">{{info.rut}}-{{info.dv_rut}}</span>
+                </div>
+                <div class="text-blue-600 font-large mb-1">Patente:
+                    <span class="text-green-500 font-medium">{{info.patente}}</span>
+                </div>
+                <div class="text-blue-600 font-large mb-1">Cantidad Total multas:
+                    <span class="text-green-500 font-medium">{{list.length}}</span>
+                </div>
+                @if(data.others.length > 0){
+                    <p-divider></p-divider>
+                    <div style="height: 150px; overflow-x: overlay; width: 100%;">
+                        <span class="block text-blue-600 font-medium mb-3 text-xl">Otras patentes asociadas al Rut: {{info.rut}}-{{info.dv_rut}}</span>
+                        @for (item of data.others; track item){
+                            <div class="text-blue-600 font-large mb-1">Patente:
+                                <span class="text-green-500 font-medium">{{ item.patente }}</span>
+                            </div>
+                            <div class="text-blue-600 font-large mb-1">Cantidad:
+                                <span class="text-green-500 font-medium">{{ item.cantidad }}</span>
+                            </div>
+                        }
+                    </div>
+                }
+                @if(data.othersRuts.length > 0){
+                    <p-divider></p-divider>
+                    <span class="block text-blue-600 font-medium mb-3 text-xl">Otros Ruts asociados a la patente: {{info.patente}}</span>
+                    @for (otr of data.othersRuts; track otr){
+                        <div class="text-blue-600 font-large mb-1">Rut:
+                            <span class="text-green-500 font-medium">{{ otr.rut }}-{{otr.dv_rut}}</span>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="grid">
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card mb-0">
+                <div class="flex justify-content-between">
+                    <div>
+                        <span
+                            class="block text-blue-600 font-medium mb-2 text-xl">Pendientes</span>
+                        <div class="text-blue-600 font-large mb-1">Total Multas Pendientes:
+                            <span class="text-green-500 font-medium">{{ (pendingMun + pendingJpl)}} </span>
+                        </div>
+                        <div class="text-blue-600 font-large mb-1">Multas Pendientes Municipio:
+                            <span class="text-green-500 font-medium">{{pendingMun}}</span>
+                        </div>
+                        <div class="text-blue-600 font-large mb-1">Multas Pendientes Juzgado:
+                            <span class="text-green-500 font-medium">{{pendingJpl}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card mb-0">
+                <div class="flex justify-content-between">
+                    <div>
+                        <span
+                            class="block text-blue-600 font-medium mb-2 text-xl">Pagadas</span>
+                        <div class="text-blue-600 font-large mb-1">Total Multas Pagadas:
+                            <span class="text-green-500 font-medium">{{ (paidMun + paidJpl)}} </span>
+                        </div>
+                        <div class="text-blue-600 font-large mb-1">Multas Pagadas Municipio:
+                            <span class="text-green-500 font-medium">{{paidMun}}</span>
+                        </div>
+                        <div class="text-blue-600 font-large mb-1">Multas Pagadas Juzgado:
+                            <span class="text-green-500 font-medium">{{paidJpl}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 lg:col-6 xl:col-3">
+            <div class="card mb-0">
+                <div class="flex justify-content-between">
+                    <div>
+                        <span class="block text-blue-600 font-medium mb-2 text-xl">Otros Estados</span>
+                        <div class="text-blue-600 font-large mb-1">Absueltas:
+                            <span class="text-green-500 font-medium">{{ acquitted }} </span>
+                        </div>
+                        <div class="text-blue-600 font-large mb-1">RMNP:
+                            <span class="text-green-500 font-medium">{{failedRMNP}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <div class="card mt-3">
+                <p-table
+                    [value]="list"
+                    [paginator]="true"
+                    [rows]="5"
+                    [showCurrentPageReport]="true"
+                    [tableStyle]="{ 'min-width': '50rem' }"
+                    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+                    [rowsPerPageOptions]="[5, 10, 20]">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pSortableColumn="fecha_infraccion" style="width:20%">Fecha Hora <p-sortIcon field="fecha_infraccion"></p-sortIcon></th>
+                        <th pSortableColumn="correlativo_mop" style="width:20%">Correlativo MOP<p-sortIcon field="correlativo_mop"></p-sortIcon></th>
+                        <th pSortableColumn="estado" style="width:20%">Estado Infracción<p-sortIcon field="estado"></p-sortIcon></th>
+                        <th pSortableColumn="reason.descripcion" style="width:20%">Razon Estado<p-sortIcon field="reason.descripcion"></p-sortIcon></th>
+                        <th>Acciones</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <td>{{ item.fecha_infraccion | date:"d/M/Y"}}</td>
+                        <td>{{ item.correlativo_mop }}</td>
+                        <td>{{ item.estado | StatustransittaxesPipe }}</td>
+                        <td>{{ item.reason.descripcion }}</td>
+                        <td>
+                            <button pButton pRipple icon="pi pi-search" class="p-button-rounded p-button-info mr-2" pTooltip="Detalle" tooltipPosition="top" (click)="detail(item)"></button>
+                            <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary mr-2" pTooltip="Imagen" tooltipPosition="top"></button>
+                            <button pButton pRipple icon="pi pi-align-justify" class="p-button-rounded p-button-info mr-2" pTooltip="Observación" tooltipPosition="top" (click)="observation(item)"></button>
+                            <button pButton pRipple icon="pi pi-id-card" class="p-button-rounded p-button-secondary mr-2" pTooltip="Carta" tooltipPosition="top"></button>
+                            <button pButton pRipple icon="pi pi-dollar" class="p-button-rounded p-button-info mr-2" pTooltip="Pagos" tooltipPosition="top" (click)="pay(item)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+}@else{
+    <div class="card">
+        <div class="flex justify-content-center">
+            <span class="text-red-600 font-medium mb-2 text-xl">No se encontraron resultados</span>
+        </div>
+    </div>
+}
+
+<!-- <app-observation-transittaxes></app-observation-transittaxes> -->
+<p-dialog *ngIf="showDetail" header="Header" [(visible)]="showDetail" [style]="{width: '1000px'}" [position]="'right'" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="header">
+        <div class="inline-flex align-items-center justify-content-center gap-2">
+            <span class="font-bold white-space-nowrap">Infracción Correlativo Mop {{transittaxesSelected.correlativo_mop}}</span>
+        </div>
+    </ng-template>
+    <app-detail-transittaxes [info]="transittaxesSelected"
+        (close)="closeDetail()"
+        (editObs)="editObservation($event)"
+    ></app-detail-transittaxes>
+</p-dialog>
+
+
+<p-dialog *ngIf="showObservation" header="Observación" [(visible)]="showObservation" [style]="{width: '600px'}" [position]="'right'" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="header">
+        <div class="inline-flex align-items-center justify-content-center gap-2">
+            <span class="font-bold white-space-nowrap">Observación para la Infracción Correlativo Mop {{transittaxesSelected.correlativo_mop}}</span>
+        </div>
+    </ng-template>
+    <app-create-observation
+        [transittaxes]="transittaxesSelected"
+        [observation]="observationSelected"
+        (close)="closeObservation()"
+    ></app-create-observation>
+</p-dialog>
+
+<p-dialog *ngIf="showObservationList" header="Observación" [(visible)]="showObservationList" [style]="{width: '800px'}" [position]="'right'" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="header">
+        <div class="inline-flex align-items-center justify-content-center gap-2">
+            <span class="font-bold white-space-nowrap">Observación para la Infracción Correlativo Mop {{transittaxesSelected.correlativo_mop}}</span>
+        </div>
+    </ng-template>
+    <app-observation-transittaxes
+        [transittaxes]="transittaxesSelected"
+        (editObs)="editObservation($event)"
+        (close)="closeObservationList()"
+    ></app-observation-transittaxes>
+</p-dialog>
+
+<p-dialog *ngIf="showPay" header="Pagos" [(visible)]="showPay" [style]="{width: '800px'}" [position]="'right'" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="header">
+        <div class="inline-flex align-items-center justify-content-center gap-2">
+            <span class="font-bold white-space-nowrap">Información del Pago para la Infracción Correlativo Mop {{transittaxesSelected.correlativo_mop}}</span>
+        </div>
+    </ng-template>
+    <app-detail-pay
+        [transittaxes]="transittaxesSelected"
+        (close)="closePay()"
+    ></app-detail-pay>
+</p-dialog>

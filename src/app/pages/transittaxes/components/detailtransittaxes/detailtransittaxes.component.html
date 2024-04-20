@@ -1,0 +1,95 @@
+<div class="grid col-12">
+    <div class="card col-12">
+        <p-tabView>
+            <p-tabPanel header="Infracción">
+                <ng-template pTemplate="header">
+                    <i class="pi pi-book"></i>
+                    <span> Infracción</span>
+                </ng-template>
+                <div class="grid col-12">
+                    <div class="card col-12">
+                        <h5>Información del Infractor</h5>
+                        <p class="mb-2">
+                            Nombre del Infractor: <span class="text-green-500 font-medium">{{ info.nombres}} {{info.apellido_paterno}} {{info.apellido_paterno}}</span>
+                        </p>
+
+                        <p class="mb-2">
+                            Rut del Infractor: <span class="text-green-500 font-medium">{{ info.rut}}-{{info.dv_rut}}</span>
+                        </p>
+
+                        <p class="mb-2">
+                            Direccion : <span class="text-green-500 font-medium">{{ info.direccion}}</span>
+                            Comuna: <span class="text-green-500 font-medium">{{ info.comuna}}</span>
+                        </p>
+
+                        <p class="mb-2">
+                            Nombre del Infractor: <span class="text-green-500 font-medium">{{ info.nombres}} {{info.apellido_paterno}} {{info.apellido_paterno}}</span>
+                        </p>
+                    </div>
+                    <div class="card col-12">
+                        <h5>Información de la infracción</h5>
+                        <p class="mb-2">
+                            Descripcion: <span class="text-green-500 font-medium">{{ info.descripcion}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Correlativo MOP: <span class="text-green-500 font-medium">{{ info.correlativo_mop}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Corrrelativo MUN: <span class="text-green-500 font-medium">{{ info.correlativo_muni}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Fecha Infraccion: <span class="text-green-500 font-medium">{{ info.fecha_infraccion}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Hora Infraccion: <span class="text-green-500 font-medium">{{ info.hora_infraccion}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Portico: <span class="text-green-500 font-medium">{{ info.portico}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Autopista: <span class="text-green-500 font-medium">{{ info.higway.nombre}}</span>
+                        </p>
+                    </div>
+
+                    <div class="card col-12">
+                        <h5>Información del Vehículo</h5>
+                        <p class="mb-2">
+                            Patente: <span class="text-green-500 font-medium">{{ info.patente}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Modelo: <span class="text-green-500 font-medium">{{ info.modelo}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Color: <span class="text-green-500 font-medium">{{ info.color}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Año: <span class="text-green-500 font-medium">{{ info.anio}}</span>
+                        </p>
+                        <p class="mb-2">
+                            Tipo Vehiculo <span class="text-green-500 font-medium">{{ info.tipo_vehiculo}}</span>
+                        </p>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Pago">
+                <ng-template pTemplate="header">
+                    <i class="pi pi-dollar"></i>
+                    <span> Pago</span>
+                </ng-template>
+                <app-detail-pay
+                    [transittaxes]="info"
+                ></app-detail-pay>
+            </p-tabPanel>
+            <p-tabPanel header="Observaciones">
+                <ng-template pTemplate="header">
+                    <i class="pi pi-bars"></i>
+                    <span> Observaciones</span>
+                </ng-template>
+                <app-observation-transittaxes
+                    [transittaxes]="info"
+                    (editObs)="editObservation($event)"
+                ></app-observation-transittaxes>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
