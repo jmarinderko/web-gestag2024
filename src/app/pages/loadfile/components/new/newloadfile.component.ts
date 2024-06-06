@@ -52,16 +52,17 @@ export class NewloadfileComponent {
     }
 
     onUpload(event: any) {
+        console.log("carga de archivo");
         console.log(event);
-        this.file = event.files[0];
+        this.file = event.target.files[0];
     }
 
     onSave() {
         if (this.form.valid) {
             const formData = new FormData();
-            // formData.append('highway', this.form.get('highway')?.value);
-            // formData.append('name', this.form.get('name')?.value);
-            // formData.append('number', this.form.get('number')?.value);
+            formData.append('highway', this.form.get('highway')?.value?.id);
+            formData.append('name', this.form.get('name')?.value);
+            formData.append('number', this.form.get('number')?.value);
             formData.append('filetxt', this.file);
             console.log(formData);
             this.loadFileService.postloadFile(formData).subscribe((res) => {

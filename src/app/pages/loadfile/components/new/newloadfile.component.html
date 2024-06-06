@@ -31,13 +31,7 @@
                     </div>
                     <div class="field col">
                         <label for="file">Archivo TXT:</label>
-                        <p-fileUpload
-                            mode="basic"
-                            name="file"
-                            (onUpload)="onUpload($event)"
-                            [auto]="true"
-                            chooseLabel="Cargar">
-                        </p-fileUpload>
+                        <input type="file" (change)="onUpload($event)" accept=".txt">
                     </div>
                 </div>
             </div>

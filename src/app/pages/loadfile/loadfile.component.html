@@ -5,7 +5,29 @@
     <button pButton type="button" class="btn btn-success" label="Cargar Archivo" (click)="newFile()"></button>
     <p-divider></p-divider>
     @defer{
-        <p-table [value]="files" [paginator]="true" [rows]="10" [responsive]="true">
+        <p-table
+            #dt1
+            [value]="files"
+            dataKey="id"
+            [paginator]="true"
+            [rows]="10"
+            [responsive]="true"
+            [globalFilterFields]="['numero', 'nombre']"
+        >
+            <ng-template pTemplate="caption">
+            <div class="flex">
+                <p-iconField iconPosition="left" class="ml-auto">
+                    <p-inputIcon>
+                        <i class="pi pi-search"></i>
+                    </p-inputIcon>
+                    <input
+                        pInputText
+                        type="text"
+                        (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                        placeholder="Search keyword" />
+                </p-iconField>
+            </div>
+        </ng-template>
             <ng-template pTemplate="header">
             <tr>
                 <th>Nombre</th>

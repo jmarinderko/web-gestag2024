@@ -32,6 +32,11 @@ export class AppMenuComponent implements OnInit {
                         icon: 'pi pi-fw pi-home',
                         routerLink: ['/loadfile'],
                     },
+                    {
+                        label: 'Modulación',
+                        icon: 'pi pi-fw pi-home',
+                        routerLink: ['/modulation'],
+                    },
                 ],
             },
             // {

@@ -5,6 +5,7 @@ import { AppLayoutComponent } from "./layout/app.layout.component";
 import { TransittaxesComponent } from './pages/transittaxes/transittaxes.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoadfileComponent } from './pages/loadfile/loadfile.component';
+import { ModulationComponent } from './pages/modulation/modulation.component';
 
 @NgModule({
     imports: [
@@ -57,6 +58,10 @@ import { LoadfileComponent } from './pages/loadfile/loadfile.component';
                         {
                             path: 'loadfile',
                             component: LoadfileComponent,
+                        },
+                        {
+                            path: 'modulation',
+                            component: ModulationComponent,
                         },
                         {
                             path: '',

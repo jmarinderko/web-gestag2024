@@ -1,0 +1,19 @@
+<p-panel header="Modulo Modulación"  class="body-content">
+    <!-- <button pButton type="button" class="btn btn-success" label="Generar Nueva Modulacion" (click)="newFile()"></button> -->
+    <p-divider></p-divider>
+    <p-tabView [(activeIndex)]="activeIndex">
+        <p-tabPanel header="Selección de Archivos" class="body-content">
+            <app-list-load-modulation
+            ></app-list-load-modulation>
+        </p-tabPanel>
+        <p-tabPanel header="Modulación Carga y Descarga">
+            <app-list-modulation></app-list-modulation>
+        </p-tabPanel>
+        <p-tabPanel header="Generación Proceso Cartas">
+            @defer{
+                <app-list-process-component>
+                </app-list-process-component>
+            }
+        </p-tabPanel>
+    </p-tabView>
+</p-panel>

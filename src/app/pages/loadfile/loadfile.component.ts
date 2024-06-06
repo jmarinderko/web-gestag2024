@@ -8,7 +8,7 @@ import { DividerModule } from 'primeng/divider';
 import { LoadFileService } from 'src/app/services/loadfile.service';
 import { StatusLoadFilePipe } from 'src/app/shared/pipe/statusLoadFile.pipe';
 import { NewloadfileComponent } from './components/new/newloadfile.component';
-;
+import { Table } from 'primeng/table';
 
 @Component({
     selector: 'app-loadfile',
@@ -32,6 +32,7 @@ export class LoadfileComponent implements OnInit {
     fileSelected: any = null;
     showLoad: boolean = false;
     loadFileService = inject(LoadFileService);
+    searchValue: string | undefined;
 
     constructor() {}
 
@@ -49,5 +50,10 @@ export class LoadfileComponent implements OnInit {
     editFile(file: any) {
         this.fileSelected = file;
         this.showLoad = true;
+    }
+
+    clear(table: Table) {
+        table.clear();
+        this.searchValue = '';
     }
 }
