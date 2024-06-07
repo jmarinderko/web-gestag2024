@@ -52,4 +52,8 @@ export class ModulationService {
         );
     }
 
+    triggerProcess(id: number): Observable<Response> {
+        return this.http.post<Response>(`${environment.apiUrl}modulation/trigger-process`, {'id':id});
+    }
+
 }

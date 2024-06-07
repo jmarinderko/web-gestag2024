@@ -33,4 +33,10 @@ export class ListProcessComponent implements OnInit {
             this.listProcess = res.data;
         });
     }
+
+    triggerProcess(idProcess: number) {
+        this.modulationService.triggerProcess(idProcess).subscribe((res) => {
+            // this.loadListProcess();
+        });
+    }
 }

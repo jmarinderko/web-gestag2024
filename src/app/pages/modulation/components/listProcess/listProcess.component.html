@@ -26,11 +26,22 @@
         <td>{{ list.estado | StatusprocessPipe }}</td>
         <td>{{ list.autopista_nombre }}</td>
         <td>
+            @if (list.estado === 0){
+                <button
+                    pButton
+                    pRipple
+                    icon="pi pi-print"
+                    class="p-button-rounded p-button-success mr-2"
+                    pTooltip="Documentos"
+                    tooltipPosition="top"
+                    (click)="triggerProcess(list.id)"
+                ></button>
+            }
             @if (list.estado === 2) {
                 <button
                     pButton
                     pRipple
-                    icon="pi pi-file-list"
+                    icon="pi pi-list"
                     class="p-button-rounded p-button-info mr-2"
                     pTooltip="Documentos"
                     tooltipPosition="top"
