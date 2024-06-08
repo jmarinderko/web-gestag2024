@@ -12,7 +12,9 @@ export class ModulationService {
     constructor(private http: HttpClient) {}
 
     getListLoad(): Observable<Response> {
-        return this.http.get<Response>(`${environment.apiUrl}modulation/listload`);
+        return this.http.get<Response>(
+            `${environment.apiUrl}modulation/listload`
+        );
     }
 
     getList(): Observable<Response> {
@@ -20,31 +22,46 @@ export class ModulationService {
     }
 
     getListProcess(): Observable<Response> {
-        return this.http.get<Response>(`${environment.apiUrl}modulation/listprocess`);
+        return this.http.get<Response>(
+            `${environment.apiUrl}modulation/listprocess`
+        );
     }
 
     consultModulation(data: any): Observable<Response> {
-        return this.http.post<Response>(`${environment.apiUrl}modulation/consult`, data);
+        return this.http.post<Response>(
+            `${environment.apiUrl}modulation/consult`,
+            data
+        );
     }
 
     loadObservationsById(id: number): Observable<Response> {
-        return this.http.post<Response>(`${environment.apiUrl}modulation/observations/byid`, {'id':id});
+        return this.http.post<Response>(
+            `${environment.apiUrl}modulation/observations/byid`,
+            { id: id }
+        );
     }
 
     generateModulation(data: any): Observable<Response> {
-        return this.http.post<Response>(`${environment.apiUrl}modulation/generateModulation`, data);
+        return this.http.post<Response>(
+            `${environment.apiUrl}modulation/generateModulation`,
+            data
+        );
     }
 
     downloadExcel(filename: string) {
-        return this.http.get(`${environment.apiUrl}modulation/download-excel/${filename}`, { responseType: 'blob' }).subscribe((response: Blob) => {
-            saveAs(response, filename);
-        });
+        return this.http
+            .get(`${environment.apiUrl}modulation/download-excel/${filename}`, {
+                responseType: 'blob',
+            })
+            .subscribe((response: Blob) => {
+                saveAs(response, filename);
+            });
     }
 
-    uploadFile(file: File,id:number): Observable<Response>{
+    uploadFile(file: File, id: number): Observable<Response> {
         const formData: FormData = new FormData();
         formData.append('file', file, file.name);
-        formData.append('id',id.toString());
+        formData.append('id', id.toString());
 
         return this.http.post<Response>(
             `${environment.apiUrl}modulation/upload-excel`,
@@ -53,7 +70,35 @@ export class ModulationService {
     }
 
     triggerProcess(id: number): Observable<Response> {
-        return this.http.post<Response>(`${environment.apiUrl}modulation/trigger-process`, {'id':id});
+        return this.http.post<Response>(
+            `${environment.apiUrl}modulation/trigger-process`,
+            { id: id }
+        );
     }
 
+    getListLetterProcess(id: number): Observable<Response> {
+        return this.http.post<Response>(
+            `${environment.apiUrl}modulation/list-letter-process`,
+            { id: id }
+        );
+    }
+
+    loadLetter(id: number, idModulation: number): Observable<Response> {
+        return this.http.post<Response>(
+            `${environment.apiUrl}modulation/load-letter`,
+            {
+                id: id,
+                idModulation: idModulation,
+            }
+        );
+    }
+
+    downloadLetter(html:string): Observable<Blob> {
+        return this.http.post(
+            `https://localhost:7205/PdfConverter/convert`,
+            {
+                HtmlContent:html},
+            { responseType: 'blob' }
+        );
+    }
 }

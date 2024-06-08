@@ -45,9 +45,9 @@
                     class="p-button-rounded p-button-info mr-2"
                     pTooltip="Documentos"
                     tooltipPosition="top"
-                    (click)="downloadExcel(list)"
+                    (click)="listLetterProcess(list.id_modulaciones)"
                 ></button>
-                <button
+                <!-- <button
                     pButton
                     pRipple
                     icon="pi pi-file-excel"
@@ -55,7 +55,7 @@
                     pTooltip="Subida Excel"
                     tooltipPosition="top"
                     (click)="upExcel(list)"
-                ></button>
+                ></button> -->
             }
         </td>
     </tr>
@@ -66,3 +66,23 @@
         </tr>
     </ng-template>
 </p-table>
+
+
+<p-dialog header="Subida Modulación" *ngIf="listLetterDialog" [modal]="true" [position]="'right'" [(visible)]="listLetterDialog">
+    <p-table [value]="listLetter">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Numero Documento</th>
+                <th>Abrir Documento</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-document>
+            <tr>
+                <td>{{ document.numero_documento }}</td>
+                <td>
+                    <button pButton type="button" label="ver" class="p-button-warning" (click)="loadLetter(document.id,document.id_modulacion)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>

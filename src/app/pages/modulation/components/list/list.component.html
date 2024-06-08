@@ -40,7 +40,7 @@
     </ng-template>
 </p-table>
 
-    <p-dialog header="Subida Modulación" *ngIf="upExcelDialog" [modal]="true" [(visible)]="upExcelDialog">
+    <p-dialog header="Subida Modulación" *ngIf="upExcelDialog" [modal]="true" [style]="{width: '800px'}" [position]="'right'" [(visible)]="upExcelDialog">
         <p-fileUpload name="file" customUpload="true" icon="pi pi-file-excel" class="p-button-rounded p-button-success mr-2" pTooltip="Descarga Excel" tooltipPosition="top"
                 (uploadHandler)="uploadExcel($event,selectedModulation)"></p-fileUpload>
     <p-messages
