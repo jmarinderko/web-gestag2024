@@ -8,6 +8,7 @@ import { ModulationService } from 'src/app/services/modulation.service';
 import { StatusprocessPipe } from 'src/app/shared/pipe/statusprocess.pipe';
 import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
 import { mergeMap } from 'rxjs/operators';
+import { GeneratedocumentsService } from 'src/app/services/generatedocuments.service';
 
 @Component({
     selector: 'app-list-process-component',
@@ -28,6 +29,7 @@ import { mergeMap } from 'rxjs/operators';
 export class ListProcessComponent implements OnInit {
     listProcess: ProcessModulation[] = [];
     modulationService = inject(ModulationService);
+    generatedocumentsService = inject(GeneratedocumentsService);
     listLetterDialog: boolean = false;
     listLetter: any[] = [];
     htmlLetter: string = '';
@@ -62,7 +64,7 @@ export class ListProcessComponent implements OnInit {
             .pipe(
                 mergeMap((res) => {
                     this.htmlLetter = res.data.html;
-                    return this.modulationService.downloadLetter(
+                    return this.generatedocumentsService.downloadLetter(
                         this.htmlLetter
                     );
                 })
@@ -74,10 +76,56 @@ export class ListProcessComponent implements OnInit {
                 },
                 (error) => {
                     console.error(
-                        'Error loading letter or downloading excel:',
+                        'Error loading letter',
                         error
                     );
                 }
             );
+    }
+
+    async generateExcel(idModulation: number) {
+        this.modulationService
+            .downloadTrackingProcess(idModulation)
+            .pipe(
+                mergeMap((res) => {
+                    return this.generatedocumentsService.excelGenerator(
+                        res.data
+                    );
+                })
+            )
+            .subscribe(
+                (excelRes) => {
+                    const fileURL = URL.createObjectURL(excelRes);
+                    window.open(fileURL, '_blank');
+                },
+                (error) => {
+                    console.error(
+                        'Error downloading excel:',
+                        error
+                    );
+                }
+            );
+
+    }
+    async generateWord(idModulation: number) {
+        this.modulationService
+            .downloadTrackingProcess(idModulation)
+            .pipe(
+                mergeMap((res) => {
+                    return this.generatedocumentsService.wordGenerator(
+                        res.data
+                    );
+                })
+            )
+            .subscribe(
+                (excelRes) => {
+                    const fileURL = URL.createObjectURL(excelRes);
+                    window.open(fileURL, '_blank');
+                },
+                (error) => {
+                    console.error('Error downloading word:', error);
+                }
+            );
+
     }
 }

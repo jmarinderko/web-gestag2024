@@ -93,12 +93,10 @@ export class ModulationService {
         );
     }
 
-    downloadLetter(html:string): Observable<Blob> {
-        return this.http.post(
-            `https://localhost:7205/PdfConverter/convert`,
-            {
-                HtmlContent:html},
-            { responseType: 'blob' }
+    downloadTrackingProcess(idModulation: number): Observable<Response> {
+        return this.http.post<Response>(
+            `${environment.apiUrl}modulation/download-tracking-process`,
+            { idModulation: idModulation }
         );
     }
 }
