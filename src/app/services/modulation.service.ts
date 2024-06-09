@@ -99,4 +99,11 @@ export class ModulationService {
             { idModulation: idModulation }
         );
     }
+
+    findLetterByDocument(code: string): Observable<Response> {
+        return this.http.post<Response>(
+            `${environment.apiUrl}modulation/find-letter-by-document`,
+            { code: code }
+        );
+    }
 }

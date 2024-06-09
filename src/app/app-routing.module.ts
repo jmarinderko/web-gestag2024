@@ -6,6 +6,7 @@ import { TransittaxesComponent } from './pages/transittaxes/transittaxes.compone
 import { HomeComponent } from './pages/home/home.component';
 import { LoadfileComponent } from './pages/loadfile/loadfile.component';
 import { ModulationComponent } from './pages/modulation/modulation.component';
+import { LetterComponent } from './pages/letter/letter.component';
 
 @NgModule({
     imports: [
@@ -62,6 +63,10 @@ import { ModulationComponent } from './pages/modulation/modulation.component';
                         {
                             path: 'modulation',
                             component: ModulationComponent,
+                        },
+                        {
+                            path: 'letter',
+                            component: LetterComponent,
                         },
                         {
                             path: '',

@@ -1,0 +1,17 @@
+<p-panel header="Administracion Impresión Unica">
+  <div class="p-grid p-align-center p-justify-center">
+    <div class="p-col-12 p-md-8 p-lg-6">
+      <div class="p-field p-grid mb-2">
+        <label for="codigo" class="p-col-12 p-md-4">Ingresar Código de seguimiento</label>
+        <div class="p-col-12 p-md-8 mt-2">
+          <input id="codigo" type="string" pInputText [(ngModel)]="codeLetter"/>
+        </div>
+      </div>
+      <div class="p-field p-grid">
+        <div class="p-col-12 p-md-4 p-offset-md-4">
+          <button pButton type="button" label="Consultar" class="p-button-success" (click)="findLetter()"></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-panel>
