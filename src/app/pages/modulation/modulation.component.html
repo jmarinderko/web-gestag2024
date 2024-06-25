@@ -3,16 +3,23 @@
     <p-divider></p-divider>
     <p-tabView [(activeIndex)]="activeIndex">
         <p-tabPanel header="Selección de Archivos" class="body-content">
-            <app-list-load-modulation
-            ></app-list-load-modulation>
+            @if (activeIndex === 0) {
+                <app-list-load-modulation
+                ></app-list-load-modulation>
+            }
         </p-tabPanel>
         <p-tabPanel header="Modulación Carga y Descarga">
-            <app-list-modulation></app-list-modulation>
+            @if (activeIndex === 1) {
+                <app-list-modulation></app-list-modulation>
+            }
+
         </p-tabPanel>
         <p-tabPanel header="Generación Proceso Cartas">
-            @defer{
-                <app-list-process-component>
-                </app-list-process-component>
+            @if (activeIndex === 2) {
+                @defer{
+                    <app-list-process-component>
+                    </app-list-process-component>
+                }
             }
         </p-tabPanel>
     </p-tabView>

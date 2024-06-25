@@ -1,0 +1,44 @@
+<p-table
+    #dt1
+    [value]="listTransfer"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="10"
+    [loading]="loading"
+>
+    <ng-template pTemplate="header">
+    <tr>
+        <th>Fecha Traspaso</th>
+        <th>Fecha Recepción</th>
+        <th>Personal Envio</th>
+        <th>Personal Recepción</th>
+        <th>Cantidad</th>
+        <th>Documento</th>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-list>
+    <tr>
+        <td>{{ list.fecha_traspaso | date: "dd/MM/Y" }}</td>
+        <td>{{ list.fecha_recepcion | date: "dd/MM/Y" }}</td>
+        <td>{{ list.usuario }} {{ list.usuario_apellido}}</td>
+        <td>{{ list.usuario_recepcion }} {{ list.usuario_recepcion_apellido}}</td>
+        <td>{{ list.cantidad_infracciones | thousandSeparator}}</td>
+        <td>
+            <button
+                pButton
+                pRipple
+                icon="pi pi-file-pdf"
+                class="p-button-rounded p-button-danger mr-2"
+                pTooltip="Documentos"
+                tooltipPosition="top"
+                (click)="downloadDocument(list.id)">
+            </button>
+        </td>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="6">No existen traspasos disponiobles </td>
+        </tr>
+    </ng-template>
+</p-table>

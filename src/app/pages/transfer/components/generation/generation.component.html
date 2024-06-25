@@ -1,0 +1,223 @@
+<p-messages [(value)]="messagesResponse" [closable]="false" />
+<button
+    pButton
+    pRipple
+    icon="pi pi-send"
+    label="Denunciar por unidades"
+    class="p-button-rounded p-button-success mr-2"
+    tooltipPosition="top"
+    (click)="generateByForms()"
+></button>
+<p-divider></p-divider>
+<p-table
+    #dt1
+    [value]="listTransfer"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="10"
+    [loading]="loading"
+>
+    <ng-template pTemplate="header">
+    <tr>
+        <th>Periodo infracciones</th>
+        <th>Periodo Denuncio</th>
+        <th>Cantidad Disponible</th>
+        <th>Acciones</th>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-list>
+    <tr>
+        <td>{{ list.fecha_minima | date: "dd/MM/Y" }} hasta {{ list.fecha_maxima | date: "dd/MM/y" }}</td>
+        <td>Denuncios Correspondientes al mes de {{ list.mes | date: "MM" }} del {{ list.anio }}</td>
+        <td>{{ list.cantidad | thousandSeparator}}</td>
+        <td>
+            <button
+                pButton
+                pRipple
+                icon="pi pi-send"
+                class="p-button-rounded p-button-warning mr-2"
+                pTooltip="Denunciar por Periodo"
+                tooltipPosition="top"
+                (click)="generateByPeriod(list)"
+            ></button>
+
+            <button
+                pButton
+                pRipple
+                icon="pi pi-send"
+                class="p-button-rounded p-button-secondary mr-2"
+                pTooltip="Denunciar por día"
+                tooltipPosition="top"
+                (click)="generateByDay(list)"
+            ></button>
+        </td>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="6">No existen traspasos disponiobles </td>
+        </tr>
+    </ng-template>
+</p-table>
+@if(dialogQuantityPeriod){
+    <p-dialog header="Generar Denuncia por periodo y cantidad" [(visible)]="dialogQuantityPeriod" [position]="'right'" [style]="{width: '100vw'}" [modal]="true">
+        <div>
+            <p-dropdown [options]="courts" [(ngModel)]="selectedCourt" placeholder="Seleccionar Juzgado" optionLabel="nombre"></p-dropdown>
+            <p></p>
+            <p-messages [(value)]="messages" [closable]="false" />
+        </div>
+        <p-footer>
+            @if (selectedCourt) {
+                <p-button label="Enviar" icon="pi pi-check" (onClick)="submitPeriod()" styleClass="p-button-success" ></p-button>
+            }
+            <p-button label="Cancelar" icon="pi pi-times" (onClick)="cancelPeriod()" styleClass="p-button-danger"></p-button>
+        </p-footer>
+    </p-dialog>
+}
+
+@if(dialogQuantityDay){
+    <p-dialog [(visible)]="dialogQuantityDay" [position]="'right'" [style]="{width: '100vw'}" [modal]="true">
+        <p-header>Generar Denuncia por día para {{transferAvailableSelected.mes}}-{{transferAvailableSelected.anio}}</p-header>
+
+        <div>
+            <p-dropdown [options]="courts" [(ngModel)]="selectedCourt" placeholder="Seleccionar Juzgado" optionLabel="nombre"></p-dropdown>
+            <p></p>
+            <p-messages [(value)]="messages" [closable]="false" />
+        </div>
+
+        <p-table [value]="listDayByMonth" [(selection)]="selectedDay" dataKey="dia"
+                [paginator]="true"
+                [rows]="5">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+                    <th>Cantidad para informar</th>
+                    <th>Dia del mes</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="item" />
+                    </td>
+                    <td>{{ item.cantidad | thousandSeparator}}</td>
+                    <td>{{ item.dia }}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <div>
+            @if (selectedDay.length > 0) {
+                <p>Dias Seleccionados</p>
+                <p>Total de infracciones a denunciar {{getTotalInfracciones() | thousandSeparator}}</p>
+                @for (item of selectedDay; track item){
+                    <span>día: {{item.dia}}  cantidad: {{item.cantidad | thousandSeparator}}</span><br>
+                }
+            }
+        </div>
+        <p-footer>
+            @if (selectedCourt) {
+                <p-button label="Enviar" icon="pi pi-check" (onClick)="submitDay()" styleClass="p-button-success" ></p-button>
+            }
+            <p-button label="Cancelar" icon="pi pi-times" (onClick)="cancelDay()" styleClass="p-button-danger"></p-button>
+        </p-footer>
+    </p-dialog>
+}
+
+
+@if(dialogForm){
+    <p-dialog [(visible)]="dialogForm" [position]="'right'" [style]="{width: '80vw'}" [modal]="true">
+        <p-header>Generar Denuncia por Busqueda de infracción</p-header>
+    <div class="p-formgrid grid">
+        <form [formGroup]="form"
+            (ngSubmit)="consult()"
+            autocomplete="off">
+            <div class="card p-fluid col col-12">
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <label class="mr-2">Ingrese RUT</label>
+                        <input
+                            pInputText
+                            formControlName="rut"
+                            type="text"
+                            placeholder="99999999-*"
+                        />
+                    </div>
+                    <div class="field col">
+                        <label class="mr-2">Ingrese Patente</label>
+                        <input
+                            pInputText
+                            formControlName="patente"
+                            type="text"
+                            maxlength="7"
+                            placeholder="****-99"
+
+                        />
+                    </div>
+                    <div class="field col">
+                        <label class="mr-2">Ingrese Correlativo MOP</label>
+                        <input
+                            pInputText
+                            formControlName="correlativo_mop"
+                            type="text"
+
+                        />
+                    </div>
+                </div>
+            </div>
+            <p-messages [(value)]="messagesform" [closable]="true" ></p-messages>
+            <p-divider></p-divider>
+            <div>
+                <button
+                    type="submit"
+                    pButton
+                    pRipple
+                    label="Consultar"
+                    class="p-button-rounded mr-2 mb-2"
+                ></button>
+            </div>
+        </form>
+    </div>
+    @if(responseConsult){
+        <p-divider></p-divider>
+        <div>
+            <p-dropdown [options]="courts" [(ngModel)]="selectedCourt" placeholder="Seleccionar Juzgado" optionLabel="nombre"></p-dropdown>
+            <p></p>
+            <p-messages [(value)]="messages" [closable]="false" />
+        </div>
+
+        <p-table [value]="listResponseConsult" [(selection)]="selectedItem" dataKey="id"
+                [paginator]="true"
+                [rows]="5"
+                [loading]="loadingResponse">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+                    <th>Correlativo Mop</th>
+                    <th>Fecha Infracción</th>
+                    <th>Hora Infracción</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-item>
+                <tr>
+                    <td>
+                        <p-tableCheckbox [value]="item" />
+                    </td>
+                    <td>{{ item.correlativo_mop}}</td>
+                    <td>{{ item.fecha_infraccion | date:"dd/MM/yyyy" }}</td>
+                    <td>{{ item.hora_infraccion}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+    }
+
+    <div>
+        <!-- crear una tabla con el resultado -->
+    </div>
+    <p-footer>
+        @if (selectedCourt) {
+            <p-button label="Enviar" icon="pi pi-check" (onClick)="submitForm()" styleClass="p-button-success" ></p-button>
+        }
+        <p-button label="Cancelar" icon="pi pi-times" (onClick)="cancelForm()" styleClass="p-button-danger"></p-button>
+    </p-footer>
+    </p-dialog>
+}

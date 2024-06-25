@@ -9,12 +9,14 @@ import { LoadFileService } from 'src/app/services/loadfile.service';
 import { StatusLoadFilePipe } from 'src/app/shared/pipe/statusLoadFile.pipe';
 import { NewloadfileComponent } from './components/new/newloadfile.component';
 import { Table } from 'primeng/table';
+import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
 
 @Component({
     selector: 'app-loadfile',
     standalone: true,
     imports: [
         CommonModule,
+        ThousandSeparatorPipe,
         PanelModule,
         ButtonModule,
         DialogModule,

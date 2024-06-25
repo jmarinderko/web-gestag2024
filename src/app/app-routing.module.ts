@@ -7,6 +7,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { LoadfileComponent } from './pages/loadfile/loadfile.component';
 import { ModulationComponent } from './pages/modulation/modulation.component';
 import { LetterComponent } from './pages/letter/letter.component';
+import { TransferComponent } from './pages/transfer/transfer.component';
 
 @NgModule({
     imports: [
@@ -67,6 +68,10 @@ import { LetterComponent } from './pages/letter/letter.component';
                         {
                             path: 'letter',
                             component: LetterComponent,
+                        },
+                        {
+                            path: 'transfer',
+                            component: TransferComponent,
                         },
                         {
                             path: '',

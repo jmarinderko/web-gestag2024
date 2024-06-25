@@ -9,19 +9,20 @@ import { StatusprocessPipe } from 'src/app/shared/pipe/statusprocess.pipe';
 import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
 import { mergeMap } from 'rxjs/operators';
 import { GeneratedocumentsService } from 'src/app/services/generatedocuments.service';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-list-process-component',
     standalone: true,
     imports: [
         CommonModule,
-        TableModule,
         ThousandSeparatorPipe,
         ButtonModule,
         StatusprocessPipe,
         TableModule,
         ButtonModule,
         DialogModule,
+        TooltipModule,
     ],
     templateUrl: './listProcess.component.html',
     styleUrl: './listProcess.component.scss',
@@ -33,13 +34,16 @@ export class ListProcessComponent implements OnInit {
     listLetterDialog: boolean = false;
     listLetter: any[] = [];
     htmlLetter: string = '';
+    loading: boolean = false;
     ngOnInit(): void {
         this.loadListProcess();
     }
 
     loadListProcess() {
+        this.loading = true;
         this.modulationService.getListProcess().subscribe((res) => {
             this.listProcess = res.data;
+            this.loading = false;
         });
     }
 
@@ -75,10 +79,7 @@ export class ListProcessComponent implements OnInit {
                     window.open(fileURL, '_blank');
                 },
                 (error) => {
-                    console.error(
-                        'Error loading letter',
-                        error
-                    );
+                    console.error('Error loading letter', error);
                 }
             );
     }
@@ -99,13 +100,9 @@ export class ListProcessComponent implements OnInit {
                     window.open(fileURL, '_blank');
                 },
                 (error) => {
-                    console.error(
-                        'Error downloading excel:',
-                        error
-                    );
+                    console.error('Error downloading excel:', error);
                 }
             );
-
     }
     async generateWord(idModulation: number) {
         this.modulationService
@@ -126,6 +123,5 @@ export class ListProcessComponent implements OnInit {
                     console.error('Error downloading word:', error);
                 }
             );
-
     }
 }

@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, inject } from '@angu
 import { ButtonModule } from 'primeng/button';
 import { DividerModule } from 'primeng/divider';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { ModulationService } from 'src/app/services/modulation.service';
 import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
 
@@ -13,6 +14,7 @@ import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pi
         CommonModule,
         TableModule,
         ThousandSeparatorPipe,
+        TooltipModule,
         ButtonModule,
         DividerModule,
     ],
@@ -24,6 +26,7 @@ export class ListLoadModulationComponent {
     listLoad: any[] = [];
     selectedLoad: any[] = [];
     modulationService = inject(ModulationService);
+    loading: boolean = false;
     constructor() {}
 
     async ngOnInit() {
@@ -31,8 +34,10 @@ export class ListLoadModulationComponent {
     }
 
     loadListLoad() {
+        this.loading = true;
         this.modulationService.getListLoad().subscribe((res) => {
             this.listLoad = res.data;
+            this.loading = false;
         });
     }
 

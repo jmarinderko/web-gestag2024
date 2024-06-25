@@ -10,7 +10,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-item>
         <tr>
-            <td>{{ item.fecha |date:"d/M/Y" }}</td>
+            <td>{{ item.fecha |date:"dd/MM/Y" }}</td>
             <td>{{ item.reason?.nombre }}, {{ item.reason?.descripcion }}</td>
             <td>{{ item.observacion }}</td>
             <td>

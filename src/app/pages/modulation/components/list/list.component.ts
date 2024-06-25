@@ -35,14 +35,17 @@ export class ListModulationComponent implements OnInit {
     upExcelDialog = false;
     selectedModulation: Modulation | null = null;
     messages: Message[] | undefined;
+    loading: boolean = false;
 
     ngOnInit(): void {
         this.loadModulation();
     }
 
     loadModulation() {
+        this.loading = true;
         this.modulationService.getList().subscribe((res) => {
             this.listModulation = res.data;
+            this.loading = false;
         });
     }
 

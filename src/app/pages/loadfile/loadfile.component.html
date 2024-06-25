@@ -36,20 +36,20 @@
                 <th>Cantidad Informadas</th>
                 <th>Autopista</th>
                 <th>Estado</th>
-                <th>Acciones</th>
+                <!-- <th>Acciones</th> -->
             </tr>
             </ng-template>
             <ng-template pTemplate="body" let-file>
             <tr>
                 <td>{{file.nombre}}</td>
                 <td>{{file.numero}}</td>
-                <td>{{file.fecha | date:"d/M/Y"}}</td>
-                <td>{{file.cant_informadas}}</td>
+                <td>{{file.fecha | date:"dd/MM/Y"}}</td>
+                <td>{{file.cant_informadas | thousandSeparator}}</td>
                 <td>{{file.higway.nombre}}</td>
                 <td>{{file.estado | statusloadfilepipe}}</td>
-                <td>
+                <!-- <td>
                     <button pButton type="button" icon="pi pi-times" (click)="editFile(file)"></button>
-                </td>
+                </td> -->
             </tr>
             </ng-template>
         </p-table>

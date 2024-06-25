@@ -42,6 +42,11 @@ export class AppMenuComponent implements OnInit {
                         icon: 'pi pi-fw pi-home',
                         routerLink: ['/letter'],
                     },
+                    {
+                        label: 'Traspasos',
+                        icon: 'pi pi-fw pi-home',
+                        routerLink: ['/transfer'],
+                    },
                 ],
             },
             // {
