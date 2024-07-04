@@ -8,11 +8,16 @@ import { LoadfileComponent } from './pages/loadfile/loadfile.component';
 import { ModulationComponent } from './pages/modulation/modulation.component';
 import { LetterComponent } from './pages/letter/letter.component';
 import { TransferComponent } from './pages/transfer/transfer.component';
+import { LoginComponent } from './pages/auth/login.component';
 
 @NgModule({
     imports: [
         RouterModule.forRoot(
             [
+                {
+                    path: 'login',
+                    component: LoginComponent,
+                },
                 {
                     path: '',
                     component: AppLayoutComponent,

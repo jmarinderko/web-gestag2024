@@ -12,20 +12,32 @@ import { IconService } from './demo/service/icon.service';
 import { NodeService } from './demo/service/node.service';
 import { PhotoService } from './demo/service/photo.service';
 import { HomeComponent } from './pages/home/home.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { LoaderInterceptor } from './_interceptor/loader.interceptor';
 
 @NgModule({
-    declarations: [
-        AppComponent, NotfoundComponent,
-    ],
+    declarations: [AppComponent, NotfoundComponent],
     imports: [
         AppRoutingModule,
-        AppLayoutModule
+        AppLayoutModule,
+        NgxSpinnerModule.forRoot({ type: 'square-jelly-box' }),
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        CountryService, CustomerService, EventService, IconService, NodeService,
-        PhotoService, ProductService
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: LoaderInterceptor,
+            multi: true,
+        },
+        CountryService,
+        CustomerService,
+        EventService,
+        IconService,
+        NodeService,
+        PhotoService,
+        ProductService,
     ],
-    bootstrap: [AppComponent]
+    bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}
