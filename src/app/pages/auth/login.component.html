@@ -1,21 +1,49 @@
-<div class="surface-ground flex align-items-center justify-content-center min-h-screen min-w-screen overflow-hidden">
-    <div class="flex flex-column align-items-center justify-content-center">
-        <div style="border-radius:56px; padding:0.3rem; background: linear-gradient(180deg, var(--surface-ground) 10%, rgba(33, 150, 243, 0) 30%);">
-            <div class="w-full surface-card py-8 px-5 sm:px-8" style="border-radius:53px">
-                <div class="text-center mb-5">
-                    <img src="assets/img/logos/logo-gestag.png" alt="Image" height="100" class="mb-3">
-                </div>
-
-                <div>
-                    <label for="email1" class="block text-900 text-xl font-medium mb-2">Login</label>
-                    <input id="email1" type="text" placeholder="Email address" pInputText class="w-full md:w-30rem mb-5" style="padding:1rem">
-                    <label for="password1" class="block text-900 font-medium text-xl mb-2">Contraseña</label>
-                    <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-5" inputStyleClass="w-full p-3 md:w-30rem"></p-password>
-                    <div class="flex align-items-center justify-content-between mb-5 gap-5">
-                    </div>
-                    <!-- <button pButton pRipple label="Ingresar" class="w-full p-3 text-xl" [routerLink]="['/']"></button> -->
-                </div>
-            </div>
-        </div>
+<div class="login-wrapper">
+  <div class="login-box">
+    <div class="login-header">
+      <img src="assets/img/logos/logo-gestag-blanco.png" alt="GESTAG Logo" class="logo">
+      <!-- <h2>GESTAG</h2> -->
+      <p>Sistema Integral de Administración de Multas</p>
     </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="field grid">
+      <div class="form-group">
+        <label for="text">Login</label>
+        <input
+          id="login"
+          type="login"
+          pInputText
+          formControlName="login"
+          placeholder="Login"
+          [ngClass]="{ 'is-invalid': loginForm.get('login')?.invalid && loginForm.get('login')?.touched }"
+        />
+        <div *ngIf="loginForm.get('login')?.invalid && loginForm.get('login')?.touched" class="invalid-feedback">
+          <div *ngIf="loginForm.get('login')?.errors?.required">Email es obligatorio</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          pPassword
+          formControlName="password"
+          placeholder="Password"
+          [ngClass]="{ 'is-invalid': loginForm.get('password')?.invalid && loginForm.get('password')?.touched }"
+        />
+        <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="invalid-feedback">
+          <div *ngIf="loginForm.get('password')?.errors?.required">Contraseña es obligatoria</div>
+          <div *ngIf="loginForm.get('password')?.errors?.minlength">
+            password mayor de 4 caracteres
+          </div>
+        </div>
+      </div>
+      <button type="submit" class="btn-login">Ingresar</button>
+    </form>
+    <br />
+      <p-messages
+          [(value)]="messages"
+          [enableService]="false"
+          [closable]="true"
+      ></p-messages>
+  </div>
 </div>
