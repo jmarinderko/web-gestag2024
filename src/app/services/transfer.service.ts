@@ -74,4 +74,11 @@ export class TransferService {
             `${environment.apiUrl}transfer/consultmemo/${id}`
         );
     }
+
+    reception(id: number, dateReception:any): Observable<Response> {
+        return this.http.post<Response>(
+            `${environment.apiUrl}transfer/reception`,
+            { id, dateReception }
+        );
+    }
 }

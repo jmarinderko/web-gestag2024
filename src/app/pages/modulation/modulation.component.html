@@ -22,5 +22,13 @@
                 }
             }
         </p-tabPanel>
+        <p-tabPanel header="Generación Modulación JPL">
+            @if (activeIndex === 3) {
+                @defer{
+                    <app-listjpl-component>
+                    </app-listjpl-component>
+                }
+            }
+        </p-tabPanel>
     </p-tabView>
 </p-panel>

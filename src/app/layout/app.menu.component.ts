@@ -43,9 +43,14 @@ export class AppMenuComponent implements OnInit {
                         routerLink: ['/letter'],
                     },
                     {
-                        label: 'Traspasos',
+                        label: 'Denuncios',
                         icon: 'pi pi-fw pi-home',
                         routerLink: ['/transfer'],
+                    },
+                    {
+                        label: 'Citaciones',
+                        icon: 'pi pi-fw pi-home',
+                        routerLink: ['/citation'],
                     },
                 ],
             },

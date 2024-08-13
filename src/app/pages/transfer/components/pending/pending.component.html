@@ -9,7 +9,7 @@
     <ng-template pTemplate="header">
     <tr>
         <th>N° Memo</th>
-        <th>Fecha Traspaso</th>
+        <th>Fecha Denuncio</th>
         <th>Personal Envio</th>
         <th>Cantidad Infracciones</th>
         <th>Documento</th>
@@ -31,13 +31,65 @@
                 tooltipPosition="top"
                 (click)="downloadDocument(list.id)">
             </button>
+            <button
+                pButton
+                pRipple
+                icon="pi pi-check"
+                class="p-button-rounded p-button-success"
+                pTooltip="Recepcionar Denuncio"
+                tooltipPosition="top"
+                (click)="reception(list)">
+            </button>
         </td>
     </tr>
     </ng-template>
     <ng-template pTemplate="emptymessage">
         <tr>
-            <td colspan="6">No existen traspasos pendientes disponibles.</td>
+            <td colspan="6">No existen denuncios pendientes disponibles.</td>
         </tr>
     </ng-template>
 </p-table>
 
+@if(receptionDialog){
+    <p-dialog header="Recepción Denuncio" [modal]="true" [style]="{width: '600px',heigth:'600px'}" [position]="'right'" [(visible)]="receptionDialog">
+
+        <form [formGroup]="form"
+            (ngSubmit)="consult()"
+            autocomplete="off">
+            <div class="card p-fluid col col-12">
+                <div class="p-formgrid grid">
+                    <p-messages
+                        [(value)]="messages"
+                        [enableService]="false"
+                        [closable]="false"
+                        class="m-2"/>
+                </div>
+                <div class="p-formgrid grid">
+                    <div class="field col">
+                        <label class="mr-2">Ingrese Fecha de Recepción</label>
+                        <p-calendar
+                        formControlName="dateReception"
+                        [showIcon]="true"
+                        [showOnFocus]="false"
+                        [inline]="true"
+                        inputId="buttondisplay" />
+                    </div>
+                </div>
+
+            </div>
+            <p-messages [(value)]="messagesform" [closable]="true" ></p-messages>
+            <p-divider></p-divider>
+            <div>
+                <button
+                    type="submit"
+                    pButton
+                    pRipple
+                    label="Recepcionar"
+                    class="p-button-rounded mr-2 mb-2"
+                ></button>
+            </div>
+        </form>
+
+    </p-dialog>
+
+}

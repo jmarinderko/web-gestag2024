@@ -10,6 +10,7 @@ import { LetterComponent } from './pages/letter/letter.component';
 import { TransferComponent } from './pages/transfer/transfer.component';
 import { LoginComponent } from './pages/auth/login.component';
 import { AuthGuard } from './guard/auth.guard';
+import { CitationComponent } from './pages/citation/citation.component';
 
 @NgModule({
     imports: [
@@ -79,6 +80,10 @@ import { AuthGuard } from './guard/auth.guard';
                         {
                             path: 'transfer',
                             component: TransferComponent,
+                        },
+                        {
+                            path: 'citation',
+                            component: CitationComponent,
                         },
                         {
                             path: '',

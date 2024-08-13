@@ -1,0 +1,120 @@
+<p-panel header="Modulo Citaciones"  class="body-content">
+    <button
+        pButton
+        pRipple
+        icon="pi pi-send"
+        label="Generar Citación"
+        class="p-button-rounded p-button-success mr-2"
+        tooltipPosition="top"
+        (click)="openDialogCitation()"
+    ></button>
+    <p-divider></p-divider>
+    <p-messages [(value)]="messages" [closable]="true" ></p-messages>
+    <p-table
+    #dt1
+    [value]="listCitations"
+    dataKey="id"
+    [paginator]="true"
+    [rows]="10"
+    [loading]="loading"
+>
+    <ng-template pTemplate="header">
+    <tr>
+        <th>Cantidad Citadas</th>
+        <th>Mes Citado</th>
+        <th>Fecha Citación</th>
+        <th>Acciones</th>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-list>
+    <tr>
+        <td>{{ list.cantidad | thousandSeparator}}</td>
+        <td>Citaciones Correspondientes al mes de {{ list.mes }} del {{ list.anio }}</td>
+        <td>{{ list.fecha_citacion | date: "dd/MM/Y" }}</td>
+        <td>
+            <button
+                pButton
+                pRipple
+                icon="pi pi-trash"
+                class="p-button-rounded p-button-danger mr-2"
+                pTooltip="Anular Citación"
+                tooltipPosition="top"
+                (click)="deleteCitation(list)">
+            </button>
+        </td>
+    </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="6">No existen citaciones disponibles.</td>
+        </tr>
+    </ng-template>
+</p-table>
+</p-panel>
+<!-- TODO manejar la logica para poder ocupar la misma vista para distintos jpl aunque el usuario sea de municipio o de jpl-->
+@if(dialogCitation){
+    <p-dialog header="Generar Citaciones" [(visible)]="dialogCitation" [position]="'right'" [style]="{width: '50vw'}" [modal]="true">
+        <p-messages severity="info">
+            <ng-template pTemplate>¿
+                <div>Cantidad total de Infracciones disponibles para citación: {{ qtyTotalCitation.cantidad | thousandSeparator}}</div>
+            </ng-template>
+        </p-messages>
+        <p-divider></p-divider>
+        <div class="p-formgrid grid">
+            <form [formGroup]="form"
+                (ngSubmit)="submitCitation()"
+                autocomplete="off">
+                <div class="card p-fluid col col-12">
+                    <div class="p-formgrid grid">
+                        <div class="field col">
+                            <label class="mr-2">Ingresar Cantidad</label>
+                            <input
+                                pInputText
+                                formControlName="qty"
+                                type="number"
+                            />
+                        </div>
+                        <div class="field col">
+                            <label class="mr-2">Fecha Citación</label>
+                            <p-calendar
+                                formControlName="dateCitation"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <p-messages [(value)]="messagesform" [closable]="true" ></p-messages>
+                <p-divider></p-divider>
+                <div>
+                    <button
+                        type="submit"
+                        pButton
+                        pRipple
+                        label="Generar Citación"
+                        class="p-button-rounded mr-2 mb-2"
+                    ></button>
+                </div>
+            </form>
+
+            <p-table [value]="listQtyAvailableCitation" [(selection)]="selectQtyAvailableCitation"
+                    [paginator]="true"
+                    [rows]="5">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th style="width: 4rem"><p-tableHeaderCheckbox /></th> -->
+                        <th>Periodo</th>
+                        <th>Cantidad para informar</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-item>
+                    <tr>
+                        <!-- <td>
+                            <p-tableCheckbox [value]="item" />
+                        </td> -->
+                        <td>Periodo: {{ item.mes }} de {{item.anio}}</td>
+                        <td>{{ item.cantidad | thousandSeparator}}</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </p-dialog>
+}

@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -15,6 +15,12 @@ import { HomeComponent } from './pages/home/home.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { LoaderInterceptor } from './_interceptor/loader.interceptor';
+import { PrimeNGConfig } from 'primeng/api';
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import { AuthInterceptor } from './_interceptor/auth.interceptor';
+
+registerLocaleData(localeEs);
 
 @NgModule({
     declarations: [AppComponent, NotfoundComponent],
@@ -30,6 +36,7 @@ import { LoaderInterceptor } from './_interceptor/loader.interceptor';
             useClass: LoaderInterceptor,
             multi: true,
         },
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
         CountryService,
         CustomerService,
         EventService,
@@ -37,6 +44,8 @@ import { LoaderInterceptor } from './_interceptor/loader.interceptor';
         NodeService,
         PhotoService,
         ProductService,
+        { provide: LOCALE_ID, useValue: 'es' },
+        PrimeNGConfig,
     ],
     bootstrap: [AppComponent],
 })

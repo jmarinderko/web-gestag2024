@@ -1,0 +1,21 @@
+<div class="card p-fluid">
+    <div *ngIf="!loading && qtyAvailable">
+        <p-messages severity="info">
+            <ng-template pTemplate>
+                <div class="ml-2">
+                    <p>
+                        Cantidad disponible para modulación: {{ qtyAvailable.cantidad | thousandSeparator }}
+                    </p>
+                    <p>
+                        Fecha infracción desde {{ qtyAvailable.fecha_minima | date: 'dd/MM/yyyy' }} hasta {{ qtyAvailable.fecha_maxima | date: 'dd/MM/yyyy' }}
+                    </p>
+                </div>
+            </ng-template>
+        </p-messages>
+    </div>
+    <p-confirmDialog></p-confirmDialog>
+    <div class="card flex justify-content-center">
+        <button pButton type="button" label="Generar Modulación" class="p-button-warning" (click)="generateModulation($event)"></button>
+    </div>
+    <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
+</div>

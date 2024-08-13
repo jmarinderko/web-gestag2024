@@ -7,6 +7,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { ListLoadModulationComponent } from './components/listLoadModulation/listLoadModulation.component';
 import { ListModulationComponent } from './components/list/list.component';
 import { ListProcessComponent } from './components/listProcess/listProcess.component';
+import { ListjplComponent } from './components/listjpl/listjpl.component';
 
 @Component({
     selector: 'app-modulation',
@@ -20,12 +21,12 @@ import { ListProcessComponent } from './components/listProcess/listProcess.compo
         ListLoadModulationComponent,
         ListModulationComponent,
         ListProcessComponent,
+        ListjplComponent,
     ],
     templateUrl: './modulation.component.html',
     styleUrl: './modulation.component.scss',
     // changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ModulationComponent{
+export class ModulationComponent {
     activeIndex: number = 0;
-
 }
