@@ -11,6 +11,7 @@ import { TransferComponent } from './pages/transfer/transfer.component';
 import { LoginComponent } from './pages/auth/login.component';
 import { AuthGuard } from './guard/auth.guard';
 import { CitationComponent } from './pages/citation/citation.component';
+import { ReasonsComponent } from './pages/administration/reasons/reasons.component';
 
 @NgModule({
     imports: [
@@ -84,6 +85,10 @@ import { CitationComponent } from './pages/citation/citation.component';
                         {
                             path: 'citation',
                             component: CitationComponent,
+                        },
+                        {
+                            path: 'reason',
+                            component: ReasonsComponent,
                         },
                         {
                             path: '',

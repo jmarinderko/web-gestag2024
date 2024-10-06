@@ -1,0 +1,48 @@
+<div class="grid col-12">
+    <form
+        [formGroup]="form"
+        (ngSubmit)="onSave()"
+        autocomplete="off"
+        enctype="multipart/form-data"
+    >
+        <div class="card p-fluid">
+            <div class="p-formgrid grid">
+                <div class="field col">
+                    <label class="mr-2">Seleccione Ubicación</label>
+                    <p-dropdown formControlName="location" [options]="entities" optionLabel="nombre" placeholder="Seleccionar Ubicación"></p-dropdown>
+                </div>
+                <div class="field col">
+                    <label class="mr-2">Tipo Estado Denuncia</label>
+                    <p-dropdown formControlName="type_reason" [options]="tipeReasons" optionLabel="label" placeholder="Tipo Estado Denuncia"></p-dropdown>
+                </div>
+                <div class="field col">
+                    <label class="mr-2">Nombre Estado Denuncia</label>
+                    <input
+                        pInputText
+                        formControlName="name"
+                        type="text"
+                    />
+                </div>
+            </div>
+            <div class="p-formgrid grid">
+                <div class="field col">
+                    <label class="mr-2">Descripción Estado Denuncia de Archivo</label>
+                    <input
+                        pInputText
+                        formControlName="description"
+                    />
+                </div>
+
+            </div>
+        </div>
+        <br />
+        <button
+            type="submit"
+            pButton
+            pRipple
+            label="Generar"
+            class="p-button-rounded mr-2 mb-2"
+        ></button>
+    </form>
+    <p-messages [(value)]="messagesform" [closable]="true" ></p-messages>
+</div>

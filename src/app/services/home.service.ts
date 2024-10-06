@@ -13,4 +13,8 @@ export class HomeService {
     getInfoCard(): Observable<Response> {
         return this.http.get<Response>(`${environment.apiUrl}home`);
     }
+
+    getEntities(): Observable<Response> {
+        return this.http.get<Response>(`${environment.apiUrl}entities`);
+    }
 }

@@ -54,13 +54,13 @@ export interface TransitTaxe {
 
 
 export interface Reason {
-    id: number;
+    id?: number;
     nombre: string;
     descripcion: string;
     tipo_razon: number;
     lugar: number;
-    created_at: string;
-    updated_at: string;
+    created_at?: string;
+    updated_at?: string;
 }
 
 export interface Higway {

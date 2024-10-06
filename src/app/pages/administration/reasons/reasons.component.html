@@ -1,0 +1,92 @@
+<p-panel header="Modulo Estados Causa" class="body-content">
+    <p-messages [(value)]="messages" [closable]="true"></p-messages>
+    <p-divider></p-divider>
+    <button pButton type="button" class="btn btn-success" label="Crear Nuevo Estado de Causa" (click)="newFile()"></button>
+    <p-divider></p-divider>
+    <div class="grid formgrid">
+        <div class="col-12 md:col-3">
+            <div class="field-checkbox">
+                <p-inputSwitch [(ngModel)]="filters.all" (onChange)="changeValueStatus('all')"></p-inputSwitch>
+                <label for="all">Todos</label>
+            </div>
+        </div>
+        <div class="col-12 md:col-3">
+            <div class="field-checkbox">
+                <p-inputSwitch [(ngModel)]="filters.mun" (onChange)="changeValueStatus('mun')"></p-inputSwitch>
+                <label for="mun">Municipalidad</label>
+            </div>
+        </div>
+        <div class="col-12 md:col-3">
+            <div class="field-checkbox">
+                <p-inputSwitch [(ngModel)]="filters.jpl" (onChange)="changeValueStatus('jpl')"></p-inputSwitch>
+                <label for="jpl">Juzgado</label>
+            </div>
+        </div>
+        <div class="col-12 md:col-3">
+            <div class="field-checkbox">
+                <p-inputSwitch [(ngModel)]="filters.rmntp" (onChange)="changeValueStatus('rmntp')"></p-inputSwitch>
+                <label for="rmntp">RMNTP</label>
+            </div>
+        </div>
+    </div>
+    <p-divider></p-divider>
+    <p-table
+        #dt1
+        [value]="listfilteredReasons"
+        dataKey="id"
+        [paginator]="true"
+        [rows]="10"
+        [loading]="loading"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="tipo_razon" style="width:20%">Tipo<p-sortIcon field="tipo_razon"></p-sortIcon></th>
+                <th pSortableColumn="nombre" style="width:20%">Nombre<p-sortIcon field="nombre"></p-sortIcon></th>
+                <th pSortableColumn="descripcion" style="width:20%">Descripción<p-sortIcon field="descripcion"></p-sortIcon></th>
+                <th style="width:20%">Ubicación</th>
+                <th style="width:20%">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-list>
+            <tr>
+                <td>{{ list.tipo_razon | typeReasonPipe }}</td>
+                <td>{{ list.nombre }}</td>
+                <td>{{ list.descripcion }}</td>
+                <td>{{ list.lugar | typeLocationPipe }}</td>
+                <td>
+                    <button
+                        pButton
+                        pRipple
+                        icon="pi pi-list"
+                        class="p-button-rounded p-button-success mr-2"
+                        pTooltip="Modificar"
+                        tooltipPosition="top"
+                        (click)="update(list)"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6">No existen estados para las causas</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-panel>
+@if (showLoad) {
+    <p-dialog header="Header" [(visible)]="showLoad" [style]="{width: '1000px'}" [position]="'right'" [modal]="true" class="p-fluid">
+        <ng-template pTemplate="header">
+            <div class="inline-flex align-items-center justify-content-center gap-2">
+                <span class="font-bold white-space-nowrap">
+                    {{ reasonSelected ? 'Editar Estado de Causa' : 'Nuevo Estado de Causa' }}
+                </span>
+            </div>
+        </ng-template>
+        <app-create-reason
+            [reasonSelected]="reasonSelected"
+            [entities]="entities"
+            [listReasons]="listReasons"
+            (closeEmiter)="closeEmiter($event)"
+        ></app-create-reason>
+    </p-dialog>
+}

@@ -17,4 +17,12 @@ export class ReasonService {
     reasonById(id: number): Observable<Response> {
         return this.http.get<Response>(`${environment.apiUrl}reasons/${id}`);
     }
+
+    createReason(reason: any): Observable<Response> {
+        return this.http.post<Response>(`${environment.apiUrl}reasons`, reason);
+    }
+
+    updateReason(reason: any): Observable<Response> {
+        return this.http.put<Response>(`${environment.apiUrl}reasons/${reason.id}`, reason);
+    }
 }
