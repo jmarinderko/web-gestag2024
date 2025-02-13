@@ -10,6 +10,7 @@ import { StatusLoadFilePipe } from 'src/app/shared/pipe/statusLoadFile.pipe';
 import { NewloadfileComponent } from './components/new/newloadfile.component';
 import { Table } from 'primeng/table';
 import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
+import { PermissionsDirective } from 'src/app/shared/directives/permissions.directive';
 
 @Component({
     selector: 'app-loadfile',
@@ -24,6 +25,7 @@ import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pi
         DividerModule,
         StatusLoadFilePipe,
         NewloadfileComponent,
+        PermissionsDirective
     ],
     templateUrl: './loadfile.component.html',
     styleUrl: './loadfile.component.scss',

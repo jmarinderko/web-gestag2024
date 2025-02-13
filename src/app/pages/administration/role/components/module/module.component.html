@@ -1,0 +1,45 @@
+<p-panel header="Modulos">
+    <p-divider></p-divider>
+    <div class="">
+        <p-table
+            #dt1
+            [value]="listModules"
+            dataKey="id"
+            [rows]="10"
+            [rowHover]="true"
+            styleClass="p-datatable-gridlines"
+            [paginator]="true"
+            [globalFilterFields]="['name']"
+            responsiveLayout="scroll">
+            <!-- <ng-template pTemplate="caption">
+                <div class="flex">
+                    <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                    <span class="p-input-icon-left ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Texto de Busqueda" />
+                    </span>
+                </div>
+            </ng-template> -->
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-module>
+                <tr>
+                    <td>{{ module.name }}</td>
+                    <td>{{ module.description }}</td>
+                    <td>
+                        <p-inputSwitch [(ngModel)]="module.selected" (onChange)="validateSwitchMaster(module)"></p-inputSwitch>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <p-messages [(value)]="messagesform" [closable]="true" ></p-messages>
+        <div>
+            <button pButton pRipple label="Guardar" class="p-button-rounded p-button-success mr-2 mb-2" (click)="save()"></button>
+        </div>
+    </div>
+</p-panel>

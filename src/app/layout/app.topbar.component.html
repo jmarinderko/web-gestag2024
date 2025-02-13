@@ -6,23 +6,32 @@
     <button #menubutton class="p-link layout-menu-button layout-topbar-button" (click)="layoutService.onMenuToggle()">
         <i class="pi pi-bars"></i>
     </button>
-
+    <!-- <img src="assets/img/logos/logo_blanco_escudo.png" alt="logo" [alt]="200" [width]="120"> -->
     <button #topbarmenubutton class="p-link layout-topbar-menu-button layout-topbar-button" (click)="layoutService.showProfileSidebar()">
         <i class="pi pi-ellipsis-v"></i>
     </button>
 
     <div #topbarmenu class="layout-topbar-menu" [ngClass]="{'layout-topbar-menu-mobile-active': layoutService.state.profileSidebarVisible}">
-        <button class="p-link layout-topbar-button">
-            <i class="pi pi-calendar"></i>
-            <span>Calendar</span>
-        </button>
-        <button class="p-link layout-topbar-button">
+        <button class="p-link layout-topbar-button" (click)="op.toggle($event)">
             <i class="pi pi-user"></i>
             <span>Profile</span>
         </button>
-        <button class="p-link layout-topbar-button" [routerLink]="'/documentation'">
-            <i class="pi pi-cog"></i>
-            <span>Settings</span>
-        </button>
     </div>
+    <p-overlayPanel #op id="overlayPanelUsuario">
+        <ng-template pTemplate>
+            <div class="card" style="padding-bottom: 0px;">
+            <div class="grid">
+                <div class="col-12">
+                    <label>{{user?.nombre}} {{user?.apellido}}</label>
+                </div>
+            </div>
+
+            <div class="grid mt-2">
+                <div class="col-12">
+                <button class="p-button-rounded p-button-danger w-full" type="button" pButton label="Cerrar Sesión" icon="pi pi-power-off" (click)="logout()"></button>
+                </div>
+            </div>
+            </div>
+        </ng-template>
+    </p-overlayPanel>
 </div>

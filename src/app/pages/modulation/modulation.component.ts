@@ -8,6 +8,7 @@ import { ListLoadModulationComponent } from './components/listLoadModulation/lis
 import { ListModulationComponent } from './components/list/list.component';
 import { ListProcessComponent } from './components/listProcess/listProcess.component';
 import { ListjplComponent } from './components/listjpl/listjpl.component';
+import { PermissionsDirective } from 'src/app/shared/directives/permissions.directive';
 
 @Component({
     selector: 'app-modulation',
@@ -22,6 +23,7 @@ import { ListjplComponent } from './components/listjpl/listjpl.component';
         ListModulationComponent,
         ListProcessComponent,
         ListjplComponent,
+        PermissionsDirective,
     ],
     templateUrl: './modulation.component.html',
     styleUrl: './modulation.component.scss',

@@ -1,0 +1,44 @@
+<form [formGroup]="form" (ngSubmit)="onSave()" autocomplete="off">
+    <div class="field">
+        <label>Nombre</label>
+        <input type="text" autocomplete="off" placeholder="Nombre" formControlName="nombre" pInputText>
+    </div>
+    <div class="field">
+        <label>Apellidos</label>
+        <input type="text" autocomplete="off" placeholder="Apellidos" formControlName="apellido" pInputText>
+    </div>
+    <!-- <div class="field">
+        <label>Rut</label>
+        <input type="text" autocomplete="off" placeholder="Rut" appRutFormatear formControlName="rut" pInputText>
+    </div> -->
+    <div class="field">
+        <label>Rol</label>
+        <p-multiSelect [options]="listRoles" scrollHeight="250px" display="chip" formControlName="selectedRoles" optionLabel="name" optionValue="id"></p-multiSelect>
+    </div>
+    <div class="field">
+        <label>Tipo Usuario</label>
+        <input type="text" autocomplete="off" placeholder="Tipo Usuario" formControlName="tipo_usuario" pInputText>
+    </div>
+    <p-divider></p-divider>
+    <div *ngIf="!userSelected" class="field">
+        <label>Login</label>
+        <input type="text" autocomplete="off" placeholder="Login" formControlName="login" pInputText>
+        <app-input-control-message [inputControl]="form.controls['login']"></app-input-control-message>
+    </div>
+
+    <div *ngIf="!userSelected" class="field">
+        <label>Contraseña</label>
+        <input type="password" autocomplete="off" placeholder="Contraseña" formControlName="password" pInputText>
+        <app-input-control-message [inputControl]="form.controls['password']"></app-input-control-message>
+    </div>
+    <p-divider></p-divider>
+    <p-messages [(value)]="messagesform" [closable]="true" ></p-messages>
+    <div class="grid">
+        <div class="col">
+            <button type="submit" pButton pRipple label="Guardar" class="p-button-rounded p-button-success mr-2 mb-2"></button>
+        </div>
+        <!-- <div class="col">
+            <button pButton pRipple type="button" label="Cancelar" class="p-button-rounded p-button-danger mr-2 mb-2" (click)="hideDialog()"></button>
+        </div> -->
+    </div>
+</form>

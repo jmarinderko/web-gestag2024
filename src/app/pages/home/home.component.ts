@@ -11,6 +11,7 @@ import { PanelModule } from 'primeng/panel';
 import { CardinfoComponent } from 'src/app/shared/components/cardinfo/cardinfo.component';
 import { Cardinfo } from 'src/app/interfaces/Cardinfo.interface';
 import { HomeService } from 'src/app/services/home.service';
+import { PermissionsDirective } from 'src/app/shared/directives/permissions.directive';
 
 @Component({
     selector: 'app-home',
@@ -19,6 +20,7 @@ import { HomeService } from 'src/app/services/home.service';
         CommonModule,
         PanelModule,
         CardinfoComponent,
+        PermissionsDirective,
     ],
     templateUrl: './home.component.html',
     styleUrl: './home.component.scss',
@@ -28,20 +30,27 @@ export class HomeComponent {
     homeServices = inject(HomeService);
     QtyTransittaxes: Response = null;
     dataCard: Cardinfo = null;
+    dataCardjpl: Cardinfo = null;
     options: any;
-    constructor(
-        private cdRef: ChangeDetectorRef
-    ) {
+    constructor(private cdRef: ChangeDetectorRef) {
         console.log('constructor');
-        this.loadChart();
+        this.loadInfoJpl();
+        this.LoadInfoMun();
     }
 
-    loadChart() {
+    LoadInfoMun() {
         console.log(this.dataCard);
-        this.homeServices.getInfoCard().subscribe((res) => {
+        this.homeServices.getInfoCardmun().subscribe((res) => {
             this.dataCard = res.data;
             this.cdRef.detectChanges();
         });
+    }
 
+    loadInfoJpl() {
+        console.log(this.dataCardjpl);
+        this.homeServices.getInfoCardjpl().subscribe((res) => {
+            this.dataCardjpl = res.data;
+            this.cdRef.detectChanges();
+        });
     }
 }

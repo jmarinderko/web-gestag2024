@@ -1,0 +1,66 @@
+<p-panel header="Módulo Roles" class="body-content">
+    <p-messages [(value)]="messages" [closable]="true"></p-messages>
+    <p-divider></p-divider>
+    <button *appPermissions="'create_role'" pButton type="button" class="btn btn-success" label="Crear Nuevo Rol" (click)="newRol()"></button>
+    <p-divider></p-divider>
+    <p-table
+            #dt1
+            [value]="listRoles"
+            dataKey="id"
+            [rows]="10"
+            [rowHover]="true"
+            styleClass="p-datatable-gridlines"
+            [paginator]="true"
+            [globalFilterFields]="['name']"
+            responsiveLayout="scroll">
+            <ng-template pTemplate="caption">
+                <div class="flex">
+                    <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt1)"></button>
+                    <span class="p-input-icon-left ml-auto">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt1.filterGlobal($event.target.value, 'contains')" placeholder="Texto de Busqueda" />
+                    </span>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-list>
+                <tr>
+                    <td>{{ list.name }}</td>
+                    <td>{{ list.description }}</td>
+                    <td>
+                        <button *appPermissions="'modify_role'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editRole(list)"></button>
+                        <button *appPermissions="'delete_user'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteRole(list)"></button>
+                        <button *appPermissions="'assign_modules'" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-secondary mr-2" (click)="moduleRoleOpen(list)"></button>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+</p-panel>
+
+@if (showRole) {
+    <p-dialog [(visible)]="showRole" [style]="{width: '600px'}" [position]="'right'" header="Nuevo Rol" [modal]="true" class="p-fluid">
+        <p-header>
+            {{ !rolSelected ? 'Agregar' : 'Modificar'}} Rol
+        </p-header>
+        <app-create-rol
+            [rolSelected]="rolSelected"
+            (emitterCloseModal) = "emitterCloseModal($event)"
+        ></app-create-rol>
+    </p-dialog>
+}
+
+
+
+<p-dialog *ngIf="showModule" [(visible)]="showModule" [style]="{width: '600px'}" [position]="'right'" header="Modificación de Modulos Asociados" [modal]="true" class="p-fluid">
+    <app-module
+        [rolSelected]="rolSelected"
+        [listModules]="listModules"
+        (emitterCloseModal) = "emitterCloseModal()"
+    ></app-module>
+</p-dialog>

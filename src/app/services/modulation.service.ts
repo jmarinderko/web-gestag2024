@@ -17,13 +17,13 @@ export class ModulationService {
         );
     }
 
-    getList(): Observable<Response> {
-        return this.http.get<Response>(`${environment.apiUrl}modulation`);
+    getList(tipeLoad: number): Observable<Response> {
+        return this.http.get<Response>(`${environment.apiUrl}modulationlist/${tipeLoad}`);
     }
 
-    getListProcess(): Observable<Response> {
+    getListProcess(tipeLoad: number): Observable<Response> {
         return this.http.get<Response>(
-            `${environment.apiUrl}modulation/listprocess`
+            `${environment.apiUrl}modulation/listprocess/${tipeLoad}`
         );
     }
 

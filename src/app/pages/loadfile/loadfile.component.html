@@ -2,7 +2,7 @@
     <!-- <p-fileUpload name="file" url="http://localhost:3000/upload" (onUpload)="onUpload($event)" (onBeforeSend)="onBeforeSend($event)" (onError)="onError($event)" (onRemove)="onRemove($event)" [auto]="true" [maxFileSize]="1000000" [accept]="'.csv'"></p-fileUpload> -->
     <!-- <p-progressBar [value]="progress" showValue="false"></p-progressBar> -->
     <!-- <p-messages [value]="msgs"></p-messages> -->
-    <button pButton type="button" class="btn btn-success" label="Cargar Archivo" (click)="newFile()"></button>
+    <button *appPermissions="'load_file_upload'" pButton type="button" class="btn btn-success" label="Cargar Archivo" (click)="newFile()"></button>
     <p-divider></p-divider>
     @defer{
         <p-table

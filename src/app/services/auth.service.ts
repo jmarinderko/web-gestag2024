@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { jwtDecode } from 'jwt-decode';
 import { Auth } from '../interfaces/Auth.interface';
+import { Module } from '../interfaces/User.interface';
 
 @Injectable({
     providedIn: 'root',
@@ -13,7 +14,7 @@ export class AuthService {
 
     constructor(private http: HttpClient) {}
 
-    login(form: any): Observable<Auth>{
+    login(form: any): Observable<Auth> {
         return this.http.post<Auth>(`${environment.apiUrl}login`, form);
     }
 
@@ -59,5 +60,14 @@ export class AuthService {
     clearSession(): void {
         sessionStorage.removeItem(this.tokenKey);
         sessionStorage.removeItem('user_info');
+    }
+
+    public validatePermissionbyControlName(controller_name: string): boolean {
+        const jwt = jwtDecode(this.getToken() as string) as any;
+        const item: Module | undefined = jwt?.user.modules?.find((p: Module) => p.label === controller_name);
+        if (item) {
+            return true;
+        }
+        return false;
     }
 }

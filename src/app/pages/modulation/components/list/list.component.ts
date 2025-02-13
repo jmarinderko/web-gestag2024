@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, type OnInit } from '@angular/core';
+import { Component, inject, Input, type OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
@@ -30,6 +30,7 @@ import { Message } from 'primeng/api';
     styleUrl: './list.component.scss',
 })
 export class ListModulationComponent implements OnInit {
+    @Input() tipeLoad: number = 0;
     listModulation: Modulation[] = [];
     modulationService = inject(ModulationService);
     upExcelDialog = false;
@@ -43,7 +44,7 @@ export class ListModulationComponent implements OnInit {
 
     loadModulation() {
         this.loading = true;
-        this.modulationService.getList().subscribe((res) => {
+        this.modulationService.getList(this.tipeLoad).subscribe((res) => {
             this.listModulation = res.data;
             this.loading = false;
         });

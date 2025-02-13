@@ -6,6 +6,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { GenerationComponent } from './components/generation/generation.component';
 import { PendingComponent } from './components/pending/pending.component';
 import { CompletedComponent } from './components/completed/completed.component';
+import { PermissionsDirective } from 'src/app/shared/directives/permissions.directive';
 
 @Component({
     selector: 'app-transfer',
@@ -18,6 +19,7 @@ import { CompletedComponent } from './components/completed/completed.component';
         GenerationComponent,
         PendingComponent,
         CompletedComponent,
+        PermissionsDirective,
     ],
     templateUrl: './transfer.component.html',
     styleUrl: './transfer.component.scss',

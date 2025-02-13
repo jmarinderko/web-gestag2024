@@ -2,21 +2,14 @@
     <!-- <button pButton type="button" class="btn btn-success" label="Generar Nueva Modulacion" (click)="newFile()"></button> -->
     <p-divider></p-divider>
     <p-tabView [(activeIndex)]="activeIndex">
-        <p-tabPanel header="Generación Denuncia" class="body-content">
-            @if (activeIndex === 0) {
-                <app-generation-transfer-component></app-generation-transfer-component>
-            }
+        <p-tabPanel *appPermissions="'create_complaints'" header="Generación Denuncia" class="body-content">
+            <app-generation-transfer-component></app-generation-transfer-component>
         </p-tabPanel>
-        <p-tabPanel header="Denuncios Pendientes Recepción">
-            @if (activeIndex === 1) {
-                <app-pending-transfer-component></app-pending-transfer-component>
-            }
-
+        <p-tabPanel *appPermissions="'pending_complaints'" header="Denuncios Pendientes Recepción">
+            <app-pending-transfer-component></app-pending-transfer-component>
         </p-tabPanel>
-        <p-tabPanel header="Denuncios Recepcionados">
-            @if (activeIndex === 2) {
-                <app-completed-transfer-component></app-completed-transfer-component>
-            }
+        <p-tabPanel *appPermissions="'received_complaints'" header="Denuncios Recepcionados">
+            <app-completed-transfer-component></app-completed-transfer-component>
         </p-tabPanel>
     </p-tabView>
 </p-panel>

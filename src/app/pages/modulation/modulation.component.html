@@ -2,33 +2,36 @@
     <!-- <button pButton type="button" class="btn btn-success" label="Generar Nueva Modulacion" (click)="newFile()"></button> -->
     <p-divider></p-divider>
     <p-tabView [(activeIndex)]="activeIndex">
-        <p-tabPanel header="Selección de Archivos" class="body-content">
-            @if (activeIndex === 0) {
-                <app-list-load-modulation
-                ></app-list-load-modulation>
-            }
+        <p-tabPanel *appPermissions="'modulation_file_municipal'" header="Selección de Archivos" class="body-content">
+            <app-list-load-modulation
+            ></app-list-load-modulation>
         </p-tabPanel>
-        <p-tabPanel header="Modulación Carga y Descarga">
-            @if (activeIndex === 1) {
-                <app-list-modulation></app-list-modulation>
-            }
-
+        <p-tabPanel *appPermissions="'modulation_excel_municipal'" header="Modulación Carga y Descarga">
+            <app-list-modulation
+                [tipeLoad]="1"
+            ></app-list-modulation>
         </p-tabPanel>
-        <p-tabPanel header="Generación Proceso Cartas">
-            @if (activeIndex === 2) {
-                @defer{
-                    <app-list-process-component>
-                    </app-list-process-component>
-                }
-            }
+        <p-tabPanel *appPermissions="'modulation_process_municipal'" header="Generación Proceso Cartas">
+            <app-list-process-component
+                [tipeLoad]="1"
+            >
+            </app-list-process-component>
         </p-tabPanel>
-        <p-tabPanel header="Generación Modulación JPL">
-            @if (activeIndex === 3) {
-                @defer{
-                    <app-listjpl-component>
-                    </app-listjpl-component>
-                }
-            }
+        <!--JPL-->
+        <p-tabPanel *appPermissions="'modulation_citation_jpl'" header="Generación Modulación JPL">
+            <app-listjpl-component>
+            </app-listjpl-component>
+        </p-tabPanel>
+        <p-tabPanel *appPermissions="'modulation_excel_jpl'" header="Modulación Carga y Descarga JPL">
+            <app-list-modulation
+                [tipeLoad]="2"
+            ></app-list-modulation>
+        </p-tabPanel>
+        <p-tabPanel *appPermissions="'modulation_process_jpl'" header="Generación Proceso Cartas JPL">
+            <app-list-process-component
+                [tipeLoad]="2"
+            >
+            </app-list-process-component>
         </p-tabPanel>
     </p-tabView>
 </p-panel>

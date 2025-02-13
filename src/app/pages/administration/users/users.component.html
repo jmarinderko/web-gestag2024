@@ -1,1 +1,61 @@
-<p>users works!</p>,
+<p-panel header="Módulo Usuarios" class="body-content">
+    <p-messages [(value)]="messages" [closable]="true"></p-messages>
+    <p-divider></p-divider>
+    <button *appPermissions="'create_user'" pButton type="button" class="btn btn-success" label="Crear Nuevo Usuario" (click)="newUser()"></button>
+    <p-divider></p-divider>
+    <p-table
+        #dt1
+        [value]="listUers"
+        dataKey="id"
+        [paginator]="true"
+        [rows]="10"
+        [loading]="loading"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th pSortableColumn="nombre" style="width:20%">Nombre<p-sortIcon field="nombre"></p-sortIcon></th>
+                <th pSortableColumn="apellido" style="width:20%">Apellido<p-sortIcon field="apellido"></p-sortIcon></th>
+                <th pSortableColumn="login" style="width:20%">Login<p-sortIcon field="login"></p-sortIcon></th>
+                <th style="width:20%">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-list>
+            <tr>
+                <td>{{ list.nombre}}</td>
+                <td>{{ list.apellido }}</td>
+                <td>{{ list.login }}</td>
+                <td>
+                    <button
+                        *appPermissions="'modify_user'"
+                        pButton
+                        pRipple
+                        icon="pi pi-list"
+                        class="p-button-rounded p-button-success mr-2"
+                        pTooltip="Modificar"
+                        tooltipPosition="top"
+                        (click)="update(list)"
+                    ></button>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="6">No existen Usuarios</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-panel>
+
+
+@if(showUser){
+    <p-dialog [(visible)]="showUser" [style]="{width: '600px'}"  [position]="'right'" [modal]="true" class="p-fluid">
+        <p-header>
+            {{ !userSelected ? 'Agregar' : 'Modificar'}} Usuario
+        </p-header>
+        <app-create-user
+            [userSelected]="userSelected"
+            [listRoles]="listRoles"
+            (closeEmiter) = "closeEmiter($event)"
+        ></app-create-user>
+    </p-dialog>
+}

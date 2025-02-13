@@ -1,12 +1,8 @@
 import { CommonModule } from '@angular/common';
-import {
-    ChangeDetectionStrategy,
-    Component,
-    inject,
-    OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Message } from 'primeng/api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Message, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
@@ -16,25 +12,32 @@ import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { TooltipModule } from 'primeng/tooltip';
 import { ReasonService } from 'src/app/services/reason.service';
-import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
-import { TypeLocationPipe } from 'src/app/shared/pipe/typeLocation.pipe';
 import { TypeReasonPipe } from 'src/app/shared/pipe/typeReason.pipe';
 import { CreateComponent } from './components/create/create.component';
 import { Reason } from 'src/app/interfaces/TransitTaxe.interface';
 import { HomeService } from 'src/app/services/home.service';
-import { forkJoin } from 'rxjs';
+import { catchError, finalize, forkJoin, of } from 'rxjs';
+import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
+import { TypeLocationPipe } from 'src/app/shared/pipe/typeLocation.pipe';
+import { PermissionsDirective } from 'src/app/shared/directives/permissions.directive';
+
+interface FilterState {
+    mun: boolean;
+    jpl: boolean;
+    rmntp: boolean;
+    all: boolean;
+}
 
 @Component({
     selector: 'app-reasons',
     standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush, // Estrategia de detección de cambios optimizada
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
         PanelModule,
         DividerModule,
         ButtonModule,
         TableModule,
-        ThousandSeparatorPipe,
         TooltipModule,
         InputSwitchModule,
         DialogModule,
@@ -43,115 +46,135 @@ import { forkJoin } from 'rxjs';
         TypeLocationPipe,
         FormsModule,
         CreateComponent,
+        PermissionsDirective
     ],
     templateUrl: './reasons.component.html',
     styleUrls: ['./reasons.component.scss'],
+    providers: [MessageService]
 })
 export class ReasonsComponent implements OnInit {
-    listReasons: Reason[] = [];
+    // Estado del componente
+    reasons: Reason[] = [];
     entities: any[] = [];
-    listfilteredReasons: Reason[] = [];
-    reasonSelected: Reason | undefined;
-    messages: Message[] = [];
+    filteredReasons: Reason[] = [];
+    selectedReason?: Reason;
     loading = false;
-    showLoad = false;
+    showLoadDialog = false;
 
-    // Se agrupan los filtros en un solo objeto
-    filters = {
+    // Estado de filtros
+    filters: FilterState = {
         mun: false,
         jpl: false,
         rmntp: false,
-        all: false,
+        all: true
     };
 
-    private reasonsService = inject(ReasonService);
-    private homeService = inject(HomeService);
-
-    constructor() {}
+    // Servicios inyectados
+    private readonly reasonsService = inject(ReasonService);
+    private readonly homeService = inject(HomeService);
+    private readonly messageService = inject(MessageService);
+    private readonly destroyRef = inject(DestroyRef);
 
     ngOnInit(): void {
         this.loadInitialData();
     }
 
-    // Uso de forkJoin para cargar datos en paralelo
-    loadInitialData(): void {
+    /**
+     * Carga los datos iniciales usando forkJoin para peticiones paralelas
+     */
+    private loadInitialData(): void {
         this.loading = true;
 
         forkJoin({
             reasons: this.reasonsService.getReasons(),
-            entities: this.homeService.getEntities(),
-        }).subscribe({
-            next: (res) => {
-                this.listReasons = res.reasons.data;
-                this.listfilteredReasons = [...this.listReasons]; // Clon para mantener los datos originales
-                this.entities = res.entities.data;
-                this.filters.all = true;
-            },
-            error: () => this.showError('Error al cargar los datos'),
-            complete: () => (this.loading = false),
+            entities: this.homeService.getEntities()
+        }).pipe(
+            takeUntilDestroyed(this.destroyRef),
+            catchError(error => {
+                this.showError('Error al cargar los datos');
+                return of({ reasons: { data: [] }, entities: { data: [] } });
+            }),
+            finalize(() => this.loading = false)
+        ).subscribe(response => {
+            this.reasons = response.reasons.data;
+            this.filteredReasons = [...this.reasons];
+            this.entities = response.entities.data;
         });
     }
 
-    // Método para cambiar el estado de los filtros
-    changeValueStatus(type: 'mun' | 'jpl' | 'rmntp' | 'all'): void {
+    /**
+     * Cambia el estado de los filtros y aplica el filtrado
+     */
+    changeFilterStatus(type: keyof FilterState): void {
         this.resetFilters();
         this.filters[type] = true;
+        this.applyFilters();
+    }
 
-        switch (type) {
-            case 'mun':
-                this.listfilteredReasons = this.filterByLocation(3);
-                break;
-            case 'jpl':
-                this.listfilteredReasons = this.filterByLocation(4);
-                break;
-            case 'rmntp':
-                this.listfilteredReasons = this.filterByLocation(6);
-                break;
-            case 'all':
-            default:
-                this.listfilteredReasons = [...this.listReasons];
-                break;
+    /**
+     * Reinicia todos los filtros a false
+     */
+    private resetFilters(): void {
+        Object.keys(this.filters).forEach(key => {
+            this.filters[key as keyof FilterState] = false;
+        });
+    }
+
+    /**
+     * Aplica los filtros activos a la lista de razones
+     */
+    private applyFilters(): void {
+        if (this.filters.all) {
+            this.filteredReasons = [...this.reasons];
+            return;
         }
+
+        this.filteredReasons = this.reasons.filter(reason => {
+            if (this.filters.mun && reason.type === 1) return true;
+            if (this.filters.jpl && reason.type === 2) return true;
+            if (this.filters.rmntp && reason.type === 3) return true;
+            return false;
+        });
     }
 
-    // Filtra la lista por ubicación
-    filterByLocation(locationId: number): Reason[] {
-        return this.listReasons.filter((reason) => reason.lugar === locationId);
+    /**
+     * Actualiza el estado de una razón
+     */
+    updateReasonStatus(reason: Reason): void {
+        this.reasonsService.updateStatus(reason).pipe(
+            takeUntilDestroyed(this.destroyRef)
+        ).subscribe({
+            next: (response) => {
+                if (response.success) {
+                    this.showSuccess('Estado actualizado correctamente');
+                    this.loadInitialData();
+                } else {
+                    this.showError('Error al actualizar el estado');
+                }
+            },
+            error: () => this.showError('Error al actualizar el estado')
+        });
     }
 
-    // Reinicia todos los filtros a `false`
-    resetFilters(): void {
-        Object.keys(this.filters).forEach(
-            (key) => (this.filters[key as keyof typeof this.filters] = false)
-        );
-    }
-
-    // Manejo de la actualización del motivo
-    update(item: Reason): void {
-        this.reasonSelected = item;
-        this.showLoad = true;
-    }
-
-    // Nuevo archivo (motivo)
-    newFile(): void {
-        this.reasonSelected = undefined;
-        this.showLoad = true;
-    }
-
-    // Cierra el diálogo y recarga la lista de motivos
-    closeEmiter(event: boolean): void {
-        this.showLoad = false;
-        this.showSuccess('Acción realizada con éxito');
-        this.loadInitialData();
-    }
-
-    // Mensaje de éxito
-    private showSuccess(detail: string): void {
-        this.messages = [{ severity: 'success', detail }];
-    }
-
-    // Mensaje de error
+    /**
+     * Muestra un mensaje de error
+     */
     private showError(detail: string): void {
-        this.messages = [{ severity: 'error', detail }];
+        this.messageService.add({
+            severity: 'error',
+            detail,
+            life: 3000
+        });
+    }
+
+    /**
+     * Muestra un mensaje de éxito
+     */
+    private showSuccess(detail: string): void {
+        this.messageService.add({
+            severity: 'success',
+            detail,
+            life: 3000
+        });
     }
 }

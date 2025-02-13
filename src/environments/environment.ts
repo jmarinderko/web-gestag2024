@@ -5,7 +5,8 @@
 export const environment = {
     production: false,
     apiUrl: 'http://127.0.0.1:8000/api/',
-    urlApiDocuments: 'https://localhost:7205/Converter/',
+    // urlApiDocuments: 'https://localhost:7205/Converter/',
+    urlApiDocuments: 'http://localhost:8080/',
 };
 
 /*

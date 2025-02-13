@@ -1,7 +1,10 @@
 <p-panel header="Home"  class="body-content">
     <div class="grid">
         <div class="col-12 lg:col-6 xl:col-4 " *ngFor="let item of dataCard">
-            <app-cardinfo-shared [data]="item"></app-cardinfo-shared>
+            <app-cardinfo-shared *appPermissions="'Home_municipio'" [data]="item"></app-cardinfo-shared>
+        </div>
+        <div class="col-12 lg:col-6 xl:col-4 " *ngFor="let item of dataCardjpl">
+            <app-cardinfo-shared *appPermissions="'Home_jpl'" [data]="item"></app-cardinfo-shared>
         </div>
     </div>
 </p-panel>

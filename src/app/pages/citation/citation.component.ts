@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Message } from 'primeng/api';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Message, MessageService } from 'primeng/api';
 import { CalendarModule } from 'primeng/calendar';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
@@ -12,9 +13,14 @@ import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TooltipModule } from 'primeng/tooltip';
-import { Citation, Citations, CountInfraccionesGroupByEntity, CountInfraccionesGroupByEntityAndMonthandYear } from 'src/app/interfaces/Citation.interface';
+import { 
+    Citation, 
+    CountInfraccionesGroupByEntity, 
+    CountInfraccionesGroupByEntityAndMonthandYear 
+} from 'src/app/interfaces/Citation.interface';
 import { CitationService } from 'src/app/services/citation.service';
 import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
+import { finalize } from 'rxjs';
 
 @Component({
     selector: 'app-citation',
@@ -37,101 +43,126 @@ import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pi
     ],
     templateUrl: './citation.component.html',
     styleUrl: './citation.component.scss',
+    providers: [MessageService]
 })
-//TODO:_ en caso de tener mas de un jpl se debe ingresar una variable en la cual seleccione el jpl que se desea utilizar y esta variable integrarla en el token
-//TODO:_ como no es el caso no se ingresara la variable
 export class CitationComponent implements OnInit {
-    listCitations: Citation[] = [];
-    citationService = inject(CitationService);
-    loading: boolean = false;
-    dialogCitation: boolean = false;
-    listQtyAvailableCitation: CountInfraccionesGroupByEntityAndMonthandYear[] =
-        [];
-    selectQtyAvailableCitation: any;
-    qtyTotalCitation: CountInfraccionesGroupByEntity = null;
-    form: FormGroup = this.fb.group({
-        qty: ['', Validators.required],
-        dateCitation: ['', Validators.required],
-    });
-    messagesform: Message[] | undefined;
-    messages: Message[] | undefined;
+    // Estado del componente
+    citations: Citation[] = [];
+    loading = false;
+    showCitationDialog = false;
+    availableCitations: CountInfraccionesGroupByEntityAndMonthandYear[] = [];
+    selectedAvailableCitation: CountInfraccionesGroupByEntityAndMonthandYear | null = null;
+    totalCitations: CountInfraccionesGroupByEntity | null = null;
 
-    constructor(private fb: FormBuilder) {}
+    // Formulario
+    citationForm: FormGroup;
 
-    ngOnInit() {
-        this.load();
+    // Servicios inyectados
+    private readonly citationService = inject(CitationService);
+    private readonly messageService = inject(MessageService);
+    private readonly destroyRef = inject(DestroyRef);
+    private readonly fb = inject(FormBuilder);
+
+    constructor() {
+        this.initForm();
     }
 
-    async load() {
+    ngOnInit(): void {
+        this.loadData();
+    }
+
+    /**
+     * Inicializa el formulario de citación
+     */
+    private initForm(): void {
+        this.citationForm = this.fb.group({
+            qty: ['', [Validators.required, Validators.min(1)]],
+            dateCitation: ['', Validators.required],
+        });
+    }
+
+    /**
+     * Carga los datos de citaciones
+     */
+    private async loadData(): Promise<void> {
         this.loading = true;
-        await this.citationService.list().subscribe((response) => {
-            this.listCitations = response.data.citations;
-            this.qtyTotalCitation =
-                response.data.countInfraccionesGroupByEntity;
-            this.listQtyAvailableCitation =
-                response.data.countInfraccionesGroupByEntityAndMonthandYear;
-        });
-        this.loading = false;
-    }
 
-    deleteCitation(citation: Citation) {
-        this.citationService.deleteCitation(citation).subscribe((res) => {
-            if (res.success) {
-                this.load();
-                this.messages = [
-                    {
-                        severity: 'success',
-                        detail: 'Citación eliminada',
-                    },
-                ];
-            }else{
-                this.messages = [
-                    {
-                        severity: 'error',
-                        detail: 'Error al eliminar la citación',
-                    },
-                ];
-            }
-        });
-    }
-
-    openDialogCitation() {
-        this.dialogCitation = true;
-        console.log('Generating citation');
-    }
-
-    submitCitation() {
-        if (this.form.invalid) {
-            this.messagesform = [
-                {
-                    severity: 'error',
-                    detail: 'Debe ingresar la cantidad de citaciones, y seleccionar el dia de citación',
+        this.citationService.list()
+            .pipe(
+                takeUntilDestroyed(this.destroyRef),
+                finalize(() => this.loading = false)
+            )
+            .subscribe({
+                next: (response) => {
+                    this.citations = response.data.citations;
+                    this.totalCitations = response.data.countInfraccionesGroupByEntity;
+                    this.availableCitations = response.data.countInfraccionesGroupByEntityAndMonthandYear;
                 },
-            ];
+                error: () => this.showMessage('error', 'Error al cargar las citaciones')
+            });
+    }
+
+    /**
+     * Elimina una citación
+     */
+    deleteCitation(citation: Citation): void {
+        this.citationService.deleteCitation(citation)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: (response) => {
+                    if (response.success) {
+                        this.loadData();
+                        this.showMessage('success', 'Citación eliminada correctamente');
+                    } else {
+                        this.showMessage('error', 'Error al eliminar la citación');
+                    }
+                },
+                error: () => this.showMessage('error', 'Error al eliminar la citación')
+            });
+    }
+
+    /**
+     * Abre el diálogo de nueva citación
+     */
+    openCitationDialog(): void {
+        this.showCitationDialog = true;
+        this.citationForm.reset();
+    }
+
+    /**
+     * Envía el formulario de citación
+     */
+    submitCitation(): void {
+        if (this.citationForm.invalid) {
+            this.showMessage('error', 'Debe ingresar la cantidad de citaciones y seleccionar el día de citación');
             return;
         }
 
-        this.citationService
-            .generateCitation(this.form.value)
-            .subscribe((res) => {
-                if (res.success) {
-                    this.load();
-                    this.form.reset();
-                    this.dialogCitation = false;
-                    this.messages = [
-                        {
-                            severity: 'success',
-                            detail: 'Citación generada correctamente',
-                        },
-                    ];
-                }else{
-                    this.messagesform = [
-                        {
-                            severity: 'error',
-                            detail: 'Error al generar la citación',
-                        },
-                    ];
-                }
+        this.citationService.generateCitation(this.citationForm.value)
+            .pipe(takeUntilDestroyed(this.destroyRef))
+            .subscribe({
+                next: (response) => {
+                    if (response.success) {
+                        this.loadData();
+                        this.citationForm.reset();
+                        this.showCitationDialog = false;
+                        this.showMessage('success', 'Citación generada correctamente');
+                    } else {
+                        this.showMessage('error', 'Error al generar la citación');
+                    }
+                },
+                error: () => this.showMessage('error', 'Error al generar la citación')
             });
+    }
+
+    /**
+     * Muestra un mensaje usando el MessageService
+     */
+    private showMessage(severity: 'success' | 'error', detail: string): void {
+        this.messageService.add({
+            severity,
+            detail,
+            life: 3000
+        });
     }
 }

@@ -1,0 +1,15 @@
+<p-panel header="Modulo Rmntp"  class="body-content">
+    <!-- <button pButton type="button" class="btn btn-success" label="Generar Nueva Modulacion" (click)="newFile()"></button> -->
+    <p-divider></p-divider>
+    <p-tabView [(activeIndex)]="activeIndex">
+        <p-tabPanel header="Generación Envio" class="body-content">
+            <app-create-send-rmntp></app-create-send-rmntp>
+        </p-tabPanel>
+        <p-tabPanel header="Recepción casos devueltos">
+            <app-list></app-list>
+        </p-tabPanel>
+        <!-- <p-tabPanel *appPermissions="'received_complaints'" header="Denuncios Recepcionados">
+            <app-completed-transfer-component></app-completed-transfer-component>
+        </p-tabPanel> -->
+    </p-tabView>
+</p-panel>

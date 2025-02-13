@@ -25,4 +25,8 @@ export class UserService {
     updateUser(User: any): Observable<Response> {
         return this.http.put<Response>(`${environment.apiUrl}users/${User.id}`, User);
     }
+
+    findModulesByUser(id: number): Observable<Response> {
+        return this.http.get<Response>(`${environment.apiUrl}users/modules/${id}`);
+    }
 }

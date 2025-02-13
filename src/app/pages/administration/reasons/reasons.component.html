@@ -1,7 +1,7 @@
 <p-panel header="Modulo Estados Causa" class="body-content">
     <p-messages [(value)]="messages" [closable]="true"></p-messages>
     <p-divider></p-divider>
-    <button pButton type="button" class="btn btn-success" label="Crear Nuevo Estado de Causa" (click)="newFile()"></button>
+    <button *appPermissions="'create_reasons'" pButton type="button" class="btn btn-success" label="Crear Nuevo Estado de Causa" (click)="newFile()"></button>
     <p-divider></p-divider>
     <div class="grid formgrid">
         <div class="col-12 md:col-3">
@@ -52,9 +52,10 @@
                 <td>{{ list.tipo_razon | typeReasonPipe }}</td>
                 <td>{{ list.nombre }}</td>
                 <td>{{ list.descripcion }}</td>
-                <td>{{ list.lugar | typeLocationPipe }}</td>
+                <td>{{ list.lugar | typeLocation }}</td>
                 <td>
                     <button
+                        *appPermissions="'modify_reasons'"
                         pButton
                         pRipple
                         icon="pi pi-list"

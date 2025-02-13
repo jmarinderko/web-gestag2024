@@ -10,8 +10,12 @@ import { Response } from '../interfaces/Response.interface';
 export class HomeService {
     constructor(private http: HttpClient) {}
 
-    getInfoCard(): Observable<Response> {
-        return this.http.get<Response>(`${environment.apiUrl}home`);
+    getInfoCardmun(): Observable<Response> {
+        return this.http.get<Response>(`${environment.apiUrl}homemun`);
+    }
+
+    getInfoCardjpl(): Observable<Response> {
+        return this.http.get<Response>(`${environment.apiUrl}homejpl`);
     }
 
     getEntities(): Observable<Response> {

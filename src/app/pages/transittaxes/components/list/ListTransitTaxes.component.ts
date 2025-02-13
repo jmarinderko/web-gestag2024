@@ -13,6 +13,7 @@ import { DetailpayComponent } from 'src/app/pages/pay/components/detailpay/detai
 import { DataTransittaxes } from 'src/app/interfaces/Response.interface';
 import { DividerModule } from 'primeng/divider';
 import { ChipModule } from 'primeng/chip';
+import { PermissionsDirective } from 'src/app/shared/directives/permissions.directive';
 
 @Component({
     selector: 'app-list-transit-taxes',
@@ -30,6 +31,7 @@ import { ChipModule } from 'primeng/chip';
         DetailpayComponent,
         DividerModule,
         ChipModule,
+        PermissionsDirective,
     ],
     templateUrl: './ListTransitTaxes.component.html',
     styleUrl: './ListTransitTaxes.component.scss',

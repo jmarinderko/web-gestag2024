@@ -1,0 +1,16 @@
+<form [formGroup]="form" (ngSubmit)="onSave()" autocomplete="off">
+    <div class="field">
+        <label>Nombre</label>
+        <input type="text" autocomplete="off" placeholder="Nombre" formControlName="name" pInputText>
+    </div>
+    <div class="field">
+        <label>Descripción</label>
+        <input type="text" autocomplete="off" placeholder="Descripción" formControlName="description" pInputText>
+    </div>
+    <p-messages [(value)]="messagesform" [closable]="true" ></p-messages>
+    <div class="grid">
+        <div class="col">
+            <button type="submit" pButton pRipple label="Guardar" class="p-button-rounded p-button-success mr-2 mb-2"></button>
+        </div>
+    </div>
+</form>

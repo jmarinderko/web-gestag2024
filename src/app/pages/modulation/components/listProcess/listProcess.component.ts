@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, type OnInit } from '@angular/core';
+import { Component, inject, Input, type OnInit } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { TableModule } from 'primeng/table';
@@ -7,9 +7,10 @@ import { ProcessModulation } from 'src/app/interfaces/Modulation.interface';
 import { ModulationService } from 'src/app/services/modulation.service';
 import { StatusprocessPipe } from 'src/app/shared/pipe/statusprocess.pipe';
 import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
-import { mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { GeneratedocumentsService } from 'src/app/services/generatedocuments.service';
 import { TooltipModule } from 'primeng/tooltip';
+import { saveAs } from 'file-saver';
 
 @Component({
     selector: 'app-list-process-component',
@@ -28,6 +29,7 @@ import { TooltipModule } from 'primeng/tooltip';
     styleUrl: './listProcess.component.scss',
 })
 export class ListProcessComponent implements OnInit {
+    @Input() tipeLoad: number = 0;
     listProcess: ProcessModulation[] = [];
     modulationService = inject(ModulationService);
     generatedocumentsService = inject(GeneratedocumentsService);
@@ -41,7 +43,7 @@ export class ListProcessComponent implements OnInit {
 
     loadListProcess() {
         this.loading = true;
-        this.modulationService.getListProcess().subscribe((res) => {
+        this.modulationService.getListProcess(this.tipeLoad).subscribe((res) => {
             this.listProcess = res.data;
             this.loading = false;
         });
@@ -96,8 +98,11 @@ export class ListProcessComponent implements OnInit {
             )
             .subscribe(
                 (excelRes) => {
-                    const fileURL = URL.createObjectURL(excelRes);
-                    window.open(fileURL, '_blank');
+                    const blob = new Blob([excelRes], {
+                        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                    });
+                    const fileName = 'custom_filename.xlsx'; // Nombre del archivo
+                    saveAs(blob, fileName);
                 },
                 (error) => {
                     console.error('Error downloading excel:', error);
@@ -109,15 +114,38 @@ export class ListProcessComponent implements OnInit {
             .downloadTrackingProcess(idModulation)
             .pipe(
                 mergeMap((res) => {
-                    return this.generatedocumentsService.wordGenerator(
-                        res.data
-                    );
+                    return this.generatedocumentsService
+                        .wordGenerator(res.data)
+                        .pipe(
+                            map((response) => {
+                                const contentDisposition = response.headers.get(
+                                    'Content-Disposition'
+                                );
+                                let fileName = 'documento_descargado.docx'; // Valor por defecto
+
+                                if (contentDisposition) {
+                                    const matches =
+                                        contentDisposition.match(
+                                            /filename="(.+)"/
+                                        );
+                                    if (matches && matches[1]) {
+                                        fileName = matches[1];
+                                    }
+                                }
+
+                                return { file: response.body, fileName };
+                            })
+                        );
                 })
             )
             .subscribe(
-                (excelRes) => {
-                    const fileURL = URL.createObjectURL(excelRes);
-                    window.open(fileURL, '_blank');
+                ({ file, fileName }) => {
+                    const fileURL = URL.createObjectURL(file);
+                    const a = document.createElement('a');
+                    a.href = fileURL;
+                    a.download = fileName;
+                    a.click();
+                    URL.revokeObjectURL(fileURL); // Limpia el objeto URL
                 },
                 (error) => {
                     console.error('Error downloading word:', error);

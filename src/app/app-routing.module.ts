@@ -12,6 +12,9 @@ import { LoginComponent } from './pages/auth/login.component';
 import { AuthGuard } from './guard/auth.guard';
 import { CitationComponent } from './pages/citation/citation.component';
 import { ReasonsComponent } from './pages/administration/reasons/reasons.component';
+import { UsersComponent } from './pages/administration/users/users.component';
+import { RoleComponent } from './pages/administration/role/roles.component';
+import { TransferrmntpComponent } from './pages/transferrmntp/transferrmntp.component';
 
 @NgModule({
     imports: [
@@ -26,42 +29,6 @@ import { ReasonsComponent } from './pages/administration/reasons/reasons.compone
                     component: AppLayoutComponent,
                     canActivate: [AuthGuard],
                     children: [
-                        // { path: '', loadChildren: () => import('./demo/components/dashboard/dashboard.module').then(m => m.DashboardModule) },
-                        // {
-                        //     path: 'uikit',
-                        //     loadChildren: () =>
-                        //         import(
-                        //             './demo/components/uikit/uikit.module'
-                        //         ).then((m) => m.UIkitModule),
-                        // },
-                        // {
-                        //     path: 'utilities',
-                        //     loadChildren: () =>
-                        //         import(
-                        //             './demo/components/utilities/utilities.module'
-                        //         ).then((m) => m.UtilitiesModule),
-                        // },
-                        // {
-                        //     path: 'documentation',
-                        //     loadChildren: () =>
-                        //         import(
-                        //             './demo/components/documentation/documentation.module'
-                        //         ).then((m) => m.DocumentationModule),
-                        // },
-                        // {
-                        //     path: 'blocks',
-                        //     loadChildren: () =>
-                        //         import(
-                        //             './demo/components/primeblocks/primeblocks.module'
-                        //         ).then((m) => m.PrimeBlocksModule),
-                        // },
-                        // {
-                        //     path: 'pages',
-                        //     loadChildren: () =>
-                        //         import(
-                        //             './demo/components/pages/pages.module'
-                        //         ).then((m) => m.PagesModule),
-                        // },
                         {
                             path: 'transittaxes',
                             component: TransittaxesComponent,
@@ -89,6 +56,18 @@ import { ReasonsComponent } from './pages/administration/reasons/reasons.compone
                         {
                             path: 'reason',
                             component: ReasonsComponent,
+                        },
+                        {
+                            path: 'users',
+                            component: UsersComponent,
+                        },
+                        {
+                            path: 'role',
+                            component: RoleComponent,
+                        },
+                        {
+                            path: 'rmntp',
+                            component: TransferrmntpComponent,
                         },
                         {
                             path: '',
