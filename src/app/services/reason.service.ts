@@ -25,4 +25,8 @@ export class ReasonService {
     updateReason(reason: any): Observable<Response> {
         return this.http.put<Response>(`${environment.apiUrl}reasons/${reason.id}`, reason);
     }
+
+    getReasonsPay(): Observable<Response> {
+        return this.http.get<Response>(`${environment.apiUrl}reasons/pay/list`);
+    }
 }

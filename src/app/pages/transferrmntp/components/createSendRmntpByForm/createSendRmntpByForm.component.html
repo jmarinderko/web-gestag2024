@@ -1,0 +1,154 @@
+<form [formGroup]="form" (ngSubmit)="consult()" autocomplete="off">
+    <div class="card p-fluid">
+        <div class="p-formgrid grid">
+            <div class="field col">
+                <label class="mr-2">Ingrese Patente</label>
+                <small id="username-help" class="p-error"
+                    >*(respetar formato de consulta)</small
+                >
+                <input
+                    pInputText
+                    formControlName="patente"
+                    type="text"
+                    maxlength="7"
+                    placeholder="****-99"
+                />
+            </div>
+            <div class="field col">
+                <label class="mr-2">Ingrese Rol-MOP</label>
+                <small id="username-help" class="p-error"
+                    >*(respetar formato de consulta)</small
+                >
+                <input
+                    pInputText
+                    formControlName="correlativo_mop"
+                    type="text"
+                    maxlength="12"
+                    placeholder="********-AAA"
+                />
+            </div>
+        </div>
+        <div class="p-formgrid grid">
+            <div class="field col">
+                <label class="mr-2">Ingrese RUT</label>
+                <input
+                    pInputText
+                    formControlName="rut"
+                    type="text"
+                    placeholder="99999999-*"
+                />
+            </div>
+            <div class="field col">
+                <label class="mr-2">Ingrese Nombre</label>
+                <input
+                    pInputText
+                    formControlName="nombres"
+                    type="text"
+                    placeholder=""
+                />
+            </div>
+        </div>
+        <div class="p-formgrid grid">
+            <div class="field col">
+                <label class="mr-2">Ingrese Apellido Paterno</label>
+                <input
+                    pInputText
+                    formControlName="apellido_paterno"
+                    type="text"
+                    placeholder=""
+                />
+            </div>
+            <div class="field col">
+                <label class="mr-2">Ingrese Apellido Materno</label>
+                <input
+                    pInputText
+                    formControlName="apellido_materno"
+                    type="text"
+                    placeholder=""
+                />
+            </div>
+        </div>
+    </div>
+    <button
+        type="submit"
+        pButton
+        pRipple
+        label="Consultar"
+        class="p-button-rounded mr-2 mb-2"
+    ></button>
+</form>
+<br />
+<p-messages
+    [(value)]="messages"
+    [enableService]="false"
+    [closable]="true"
+></p-messages>
+<p-divider></p-divider>
+
+<p-table
+    #dt
+    [value]="listInfracciones"
+    [globalFilterFields]="['patente', 'correlativo_mop', 'fecha_infraccion']"
+    [tableStyle]="{ 'min-width': '45rem' }"
+    [(selection)]="selectedInfracciones"
+    [rowHover]="true"
+    dataKey="id"
+    [scrollable]="true"
+    scrollHeight="300px"
+>
+    <ng-template pTemplate="caption">
+        <div class="flex justify-content-between align-items-center">
+            <button pButton label="Limpiar" class="p-button-outlined" icon="pi pi-filter-slash" (click)="clear(dt)"></button>
+            <button pButton label="Generar Envio" class="p-button" [disabled]="selectedInfracciones.length == 0" icon="pi pi-send" (click)="Send()"></button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 4rem">
+                <p-tableHeaderCheckbox />
+            </th>
+            <th>
+                <div>Patente</div>
+                <div class="flex flex-column gap-1">
+                    <span class="p-input-icon-left w-10rem">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'patente', 'contains')" placeholder="Buscar..." class="w-full p-inputtext-sm"/>
+                    </span>
+                </div>
+            </th>
+            <th>
+                <div>N° MOP</div>
+                <div class="flex flex-column gap-1">
+                    <span class="p-input-icon-left w-10rem">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'correlativo_mop', 'contains')" placeholder="Buscar..." class="w-full p-inputtext-sm"/>
+                    </span>
+                </div>
+            </th>
+            <th>
+                <div>Fecha Infracción</div>
+                <div class="flex flex-column gap-1">
+                    <span class="p-input-icon-left w-10rem">
+                        <i class="pi pi-search"></i>
+                        <input pInputText type="text" (input)="dt.filter($event.target.value, 'fecha_infraccion', 'contains')" placeholder="Buscar..." class="w-full p-inputtext-sm"/>
+                    </span>
+                </div>
+            </th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td>
+                <p-tableCheckbox [value]="item" />
+            </td>
+            <td>{{ item.patente }}</td>
+            <td>{{ item.correlativo_mop}}</td>
+            <td>{{ item.fecha_infraccion | date:"dd/MM/Y" }} {{item.hora_infraccion}}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+        <tr>
+            <td colspan="4">No se encontraron registros.</td>
+        </tr>
+    </ng-template>
+</p-table>

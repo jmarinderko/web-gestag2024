@@ -5,7 +5,7 @@
     <p-divider></p-divider>
     <p-table
             #dt1
-            [value]="listRoles"
+            [value]="roles"
             dataKey="id"
             [rows]="10"
             [rowHover]="true"
@@ -29,38 +29,60 @@
                     <th>Acciones</th>
                 </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-list>
+            <ng-template pTemplate="body" let-role>
                 <tr>
-                    <td>{{ list.name }}</td>
-                    <td>{{ list.description }}</td>
+                    <td>{{ role.name }}</td>
+                    <td>{{ role.description }}</td>
                     <td>
-                        <button *appPermissions="'modify_role'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="editRole(list)"></button>
-                        <button *appPermissions="'delete_user'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteRole(list)"></button>
-                        <button *appPermissions="'assign_modules'" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-secondary mr-2" (click)="moduleRoleOpen(list)"></button>
+                        <button *appPermissions="'modify_role'" pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-info mr-2" (click)="openEditRoleDialog(role)" pTooltip="Editar rol"></button>
+                        <button *appPermissions="'delete_user'" pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning mr-2" (click)="deleteRole(role)" pTooltip="Eliminar rol"></button>
+                        <button *appPermissions="'assign_modules'" pButton pRipple icon="pi pi-list" class="p-button-rounded p-button-secondary mr-2" (click)="openModuleDialog(role)" pTooltip="Asignar módulos"></button>
                     </td>
                 </tr>
             </ng-template>
         </p-table>
 </p-panel>
 
-@if (showRole) {
-    <p-dialog [(visible)]="showRole" [style]="{width: '600px'}" [position]="'right'" header="Nuevo Rol" [modal]="true" class="p-fluid">
-        <p-header>
-            {{ !rolSelected ? 'Agregar' : 'Modificar'}} Rol
-        </p-header>
+<p-confirmDialog [style]="{width: '450px'}"></p-confirmDialog>
+@if (showRoleDialog) {
+    <p-dialog
+        [(visible)]="showRoleDialog"
+        [style]="{width: '600px'}"
+        [position]="'right'"
+        [modal]="true"
+        class="p-fluid"
+    >
+        <ng-template pTemplate="header">
+            <div class="inline-flex align-items-center justify-content-center gap-2">
+                <span class="font-bold white-space-nowrap">
+                    {{ selectedRole ? 'Modificar Rol' : 'Agregar Rol' }}
+                </span>
+            </div>
+        </ng-template>
         <app-create-rol
-            [rolSelected]="rolSelected"
-            (emitterCloseModal) = "emitterCloseModal($event)"
+            [rolSelected]="selectedRole"
+            (emitterCloseModal)="handleDialogClose($event)"
         ></app-create-rol>
     </p-dialog>
 }
 
-
-
-<p-dialog *ngIf="showModule" [(visible)]="showModule" [style]="{width: '600px'}" [position]="'right'" header="Modificación de Modulos Asociados" [modal]="true" class="p-fluid">
-    <app-module
-        [rolSelected]="rolSelected"
-        [listModules]="listModules"
-        (emitterCloseModal) = "emitterCloseModal()"
-    ></app-module>
-</p-dialog>
+@if (showModuleDialog) {
+    <p-dialog
+        [(visible)]="showModuleDialog"
+        [style]="{width: '600px'}"
+        [position]="'right'"
+        [modal]="true"
+        class="p-fluid"
+    >
+        <ng-template pTemplate="header">
+            <div class="inline-flex align-items-center justify-content-center gap-2">
+                <span class="font-bold white-space-nowrap">Modificación de Módulos Asociados</span>
+            </div>
+        </ng-template>
+        <app-module
+            [rolSelected]="selectedRole"
+            [listModules]="modules"
+            (emitterCloseModal)="handleDialogClose($event)"
+        ></app-module>
+    </p-dialog>
+}

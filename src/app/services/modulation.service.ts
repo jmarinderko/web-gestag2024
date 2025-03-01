@@ -18,7 +18,7 @@ export class ModulationService {
     }
 
     getList(tipeLoad: number): Observable<Response> {
-        return this.http.get<Response>(`${environment.apiUrl}modulationlist/${tipeLoad}`);
+        return this.http.get<Response>(`${environment.apiUrl}modulation/modulationlist/${tipeLoad}`);
     }
 
     getListProcess(tipeLoad: number): Observable<Response> {

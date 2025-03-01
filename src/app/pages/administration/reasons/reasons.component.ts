@@ -31,7 +31,6 @@ interface FilterState {
 @Component({
     selector: 'app-reasons',
     standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [
         CommonModule,
         PanelModule,
@@ -60,6 +59,7 @@ export class ReasonsComponent implements OnInit {
     selectedReason?: Reason;
     loading = false;
     showLoadDialog = false;
+    messages: Message[] = [];
 
     // Estado de filtros
     filters: FilterState = {
@@ -84,7 +84,6 @@ export class ReasonsComponent implements OnInit {
      */
     private loadInitialData(): void {
         this.loading = true;
-
         forkJoin({
             reasons: this.reasonsService.getReasons(),
             entities: this.homeService.getEntities()
@@ -130,9 +129,9 @@ export class ReasonsComponent implements OnInit {
         }
 
         this.filteredReasons = this.reasons.filter(reason => {
-            if (this.filters.mun && reason.type === 1) return true;
-            if (this.filters.jpl && reason.type === 2) return true;
-            if (this.filters.rmntp && reason.type === 3) return true;
+            if (this.filters.mun && reason.tipo_razon === 1) return true;
+            if (this.filters.jpl && reason.tipo_razon === 2) return true;
+            if (this.filters.rmntp && reason.tipo_razon === 3) return true;
             return false;
         });
     }
@@ -141,7 +140,7 @@ export class ReasonsComponent implements OnInit {
      * Actualiza el estado de una razón
      */
     updateReasonStatus(reason: Reason): void {
-        this.reasonsService.updateStatus(reason).pipe(
+        this.reasonsService.updateReason(reason).pipe(
             takeUntilDestroyed(this.destroyRef)
         ).subscribe({
             next: (response) => {
@@ -160,21 +159,31 @@ export class ReasonsComponent implements OnInit {
      * Muestra un mensaje de error
      */
     private showError(detail: string): void {
-        this.messageService.add({
+        this.messages = [{
             severity: 'error',
+            summary: 'Error',
             detail,
             life: 3000
-        });
+        }];
     }
 
     /**
      * Muestra un mensaje de éxito
      */
     private showSuccess(detail: string): void {
-        this.messageService.add({
+        this.messages = [{
             severity: 'success',
+            summary: 'Éxito',
             detail,
             life: 3000
-        });
+        }];
+    }
+
+    closeEmiter(event: boolean): void {
+        if (event) {
+            this.showLoadDialog = false;
+            this.selectedReason = undefined;
+            this.loadInitialData();
+        }
     }
 }

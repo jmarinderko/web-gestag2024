@@ -6,10 +6,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ThousandSeparatorPipe implements PipeTransform {
 
-  transform(value: number, ...args: unknown[]): string {
-    if (!value) {
-      return '';
-    }
+  transform(value: any): string {
+    if (!value) return '0';
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }
 

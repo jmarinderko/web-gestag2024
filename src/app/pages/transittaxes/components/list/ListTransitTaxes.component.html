@@ -132,7 +132,9 @@
                             <!-- <button *appPermissions="'question_btn_photo'" pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-secondary mr-2" pTooltip="Imagen" tooltipPosition="top"></button> -->
                             <button *appPermissions="'question_btn_observation'" pButton pRipple icon="pi pi-align-justify" class="p-button-rounded p-button-info mr-2" pTooltip="Observación" tooltipPosition="top" (click)="observation(item)"></button>
                             <button *appPermissions="'question_btn_letter'" pButton pRipple icon="pi pi-id-card" class="p-button-rounded p-button-secondary mr-2" pTooltip="Carta" tooltipPosition="top"></button>
-                            <button *appPermissions="'question_btn_payment'" pButton pRipple icon="pi pi-dollar" class="p-button-rounded p-button-info mr-2" pTooltip="Pagos" tooltipPosition="top" (click)="pay(item)"></button>
+                            @if(item.estado == 1){
+                                <button *appPermissions="'question_btn_payment'" pButton pRipple icon="pi pi-dollar" class="p-button-rounded p-button-info mr-2" pTooltip="Pagos" tooltipPosition="top" (click)="pay(item)"></button>
+                            }
                         </td>
                     </tr>
                 </ng-template>
@@ -188,14 +190,9 @@
     ></app-observation-transittaxes>
 </p-dialog>
 
-<p-dialog *ngIf="showPay" header="Pagos" [(visible)]="showPay" [style]="{width: '800px'}" [position]="'right'" [modal]="true" class="p-fluid">
-    <ng-template pTemplate="header">
-        <div class="inline-flex align-items-center justify-content-center gap-2">
-            <span class="font-bold white-space-nowrap">Información del Pago para la Infracción Correlativo Mop {{transittaxesSelected.correlativo_mop}}</span>
-        </div>
-    </ng-template>
-    <app-detail-pay
-        [transittaxes]="transittaxesSelected"
-        (close)="closePay()"
-    ></app-detail-pay>
+<p-dialog *ngIf="showPay" [(visible)]="showPay" [style]="{width: '1000px'}" [position]="'right'" [modal]="true" class="p-fluid">
+    <app-transitaxes-pay
+        [transitaxe]="transittaxesSelected"
+        (emitterClose)="closePay($event)"
+    ></app-transitaxes-pay>
 </p-dialog>

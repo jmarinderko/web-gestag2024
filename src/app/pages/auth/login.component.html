@@ -17,7 +17,7 @@
           [ngClass]="{ 'is-invalid': loginForm.get('login')?.invalid && loginForm.get('login')?.touched }"
         />
         <div *ngIf="loginForm.get('login')?.invalid && loginForm.get('login')?.touched" class="invalid-feedback">
-          <div *ngIf="loginForm.get('login')?.errors?.required">Email es obligatorio</div>
+          <div *ngIf="loginForm.get('login')?.errors?.required">Login es obligatorio</div>
         </div>
       </div>
       <div class="form-group">
@@ -32,9 +32,6 @@
         />
         <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="invalid-feedback">
           <div *ngIf="loginForm.get('password')?.errors?.required">Contraseña es obligatoria</div>
-          <div *ngIf="loginForm.get('password')?.errors?.minlength">
-            password mayor de 4 caracteres
-          </div>
         </div>
       </div>
       <button type="submit" class="btn-login">Ingresar</button>

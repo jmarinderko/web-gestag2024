@@ -13,10 +13,10 @@ import { PanelModule } from 'primeng/panel';
 import { TableModule } from 'primeng/table';
 import { TabViewModule } from 'primeng/tabview';
 import { TooltipModule } from 'primeng/tooltip';
-import { 
-    Citation, 
-    CountInfraccionesGroupByEntity, 
-    CountInfraccionesGroupByEntityAndMonthandYear 
+import {
+    Citation,
+    CountInfraccionesGroupByEntity,
+    CountInfraccionesGroupByEntityAndMonthandYear
 } from 'src/app/interfaces/Citation.interface';
 import { CitationService } from 'src/app/services/citation.service';
 import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
@@ -56,7 +56,8 @@ export class CitationComponent implements OnInit {
 
     // Formulario
     citationForm: FormGroup;
-
+    messagesform: Message[] = [];
+    messages: Message[] = [];
     // Servicios inyectados
     private readonly citationService = inject(CitationService);
     private readonly messageService = inject(MessageService);

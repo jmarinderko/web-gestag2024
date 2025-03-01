@@ -13,4 +13,8 @@ export class ServiceService {
     getHighway(): Observable<Response> {
         return this.http.get<Response>(`${environment.apiUrl}highways`);
     }
+
+    getValueUtm(): Observable<Response> {
+        return this.http.get<Response>(`${environment.apiUrl}listUtm`);
+    }
 }

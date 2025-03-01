@@ -3,7 +3,7 @@ import { Component, DestroyRef, inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MessageService } from 'primeng/api';
+import { Message, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
@@ -33,7 +33,7 @@ export class LoginComponent {
     // Estado del formulario
     loginForm: FormGroup;
     loading = false;
-
+    messages: Message[] = [];
     // Servicios inyectados
     private readonly authService = inject(AuthService);
     private readonly messageService = inject(MessageService);
@@ -52,13 +52,10 @@ export class LoginComponent {
         this.loginForm = this.fb.group({
             login: ['', [
                 Validators.required,
-                Validators.minLength(3)
             ]],
             password: ['', [
                 Validators.required,
-                Validators.minLength(6)
-            ]],
-            rememberMe: [false]
+            ]]
         });
     }
 
@@ -73,7 +70,7 @@ export class LoginComponent {
         }
 
         this.loading = true;
-        
+
         this.authService.login(this.loginForm.value)
             .pipe(
                 takeUntilDestroyed(this.destroyRef),
@@ -99,7 +96,7 @@ export class LoginComponent {
      */
     private handleSuccessfulLogin(token: string): void {
         this.authService.setToken(token);
-        
+
         if (this.loginForm.get('rememberMe')?.value) {
             // Implementar lógica para recordar usuario si es necesario
             localStorage.setItem('rememberMe', 'true');

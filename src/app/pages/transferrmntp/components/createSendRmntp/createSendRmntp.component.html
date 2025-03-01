@@ -91,3 +91,11 @@
 
 }
 
+@if(createSendRmntpByFormDialog){
+    <p-dialog header="Envios Personalizados"[modal]="true" [style]="{width: '800px',heigth:'600px'}" [position]="'right'" [(visible)]="createSendRmntpByFormDialog">
+        <app-create-send-rmntp-by-form
+            (closeEmiter)="closeEmiter()"
+        ></app-create-send-rmntp-by-form>
+    </p-dialog>
+}
+

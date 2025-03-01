@@ -18,6 +18,7 @@ import { ListComponent } from './components/list/list.component';
         PermissionsDirective,
         CreateSendRmntpComponent,
         ListComponent,
+
     ],
     templateUrl: './transferrmntp.component.html',
     styleUrl: './transferrmntp.component.scss',

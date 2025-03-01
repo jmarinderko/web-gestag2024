@@ -5,7 +5,7 @@
     <p-divider></p-divider>
     <p-table
         #dt1
-        [value]="listUers"
+        [value]="users"
         dataKey="id"
         [paginator]="true"
         [rows]="10"
@@ -33,7 +33,7 @@
                         class="p-button-rounded p-button-success mr-2"
                         pTooltip="Modificar"
                         tooltipPosition="top"
-                        (click)="update(list)"
+                        (click)="openEditUserDialog(list)"
                     ></button>
                 </td>
             </tr>
@@ -47,15 +47,15 @@
 </p-panel>
 
 
-@if(showUser){
-    <p-dialog [(visible)]="showUser" [style]="{width: '600px'}"  [position]="'right'" [modal]="true" class="p-fluid">
+@if(showUserDialog){
+    <p-dialog [(visible)]="showUserDialog" [style]="{width: '600px'}"  [position]="'right'" [modal]="true" class="p-fluid">
         <p-header>
-            {{ !userSelected ? 'Agregar' : 'Modificar'}} Usuario
+            {{ !selectedUser ? 'Agregar' : 'Modificar'}} Usuario
         </p-header>
         <app-create-user
-            [userSelected]="userSelected"
-            [listRoles]="listRoles"
-            (closeEmiter) = "closeEmiter($event)"
+            [userSelected]="selectedUser"
+            [listRoles]="roles"
+            (closeEmiter) = "handleDialogClose()"
         ></app-create-user>
     </p-dialog>
 }

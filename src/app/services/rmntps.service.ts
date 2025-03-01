@@ -35,4 +35,18 @@ export class RmntpService {
             }
         );
     }
+
+    findInfraccionByForm(form: any): Observable<Response> {
+        return this.http.post<Response>(
+            `${environment.apiUrl}rmntp/findinfraccionbyform`,
+            form
+        );
+    }
+
+    sendByForm(data: any): Observable<Response> {
+        return this.http.post<Response>(
+            `${environment.apiUrl}rmntp/sendbyfrorm`,
+            { data }
+        );
+    }
 }

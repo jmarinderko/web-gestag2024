@@ -189,20 +189,19 @@ export class TransittaxesComponent {
         return false;
     }
 
-    validatePatent() {
+    validatePatent(): boolean {
         const regexCar = /^([A-Z]{2})([A-Z]{2})-\d{2}$/;
         const regexCarOld = /^([A-Z]{2})(\d{2})-\d{2}$/;
         const regexMotorcycle = /^([A-Z]{3})-\d{2}$/;
+        const regexAA9999 = /^[A-Z]{2}\d{4}$/;
+        const regexAAAA99 = /^[A-Z]{4}\d{2}$/;
+
         if (this.formpatentrole.get('patent')?.value) {
-            if (regexCar.test(this.formpatentrole.get('patent')?.value)) {
-                return true;
-            } else if (
-                regexMotorcycle.test(this.formpatentrole.get('patent')?.value)
-            ) {
-                return true;
-            } else if (
-                regexCarOld.test(this.formpatentrole.get('patent')?.value)
-            ) {
+            if (regexCar.test(this.formpatentrole.get('patent')?.value) ||
+                regexCarOld.test(this.formpatentrole.get('patent')?.value) ||
+                regexMotorcycle.test(this.formpatentrole.get('patent')?.value) ||
+                regexAA9999.test(this.formpatentrole.get('patent')?.value) ||
+                regexAAAA99.test(this.formpatentrole.get('patent')?.value)) {
                 return true;
             }
         }

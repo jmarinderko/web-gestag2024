@@ -21,4 +21,8 @@ export class PayService {
     getPaymentBoxById(id: number): Observable<Response> {
         return this.http.get<Response>(`${environment.apiUrl}paymentbox/${id}`);
     }
+
+    getPaymentBox(): Observable<Response> {
+        return this.http.get<Response>(`${environment.apiUrl}paymentbox`);
+    }
 }

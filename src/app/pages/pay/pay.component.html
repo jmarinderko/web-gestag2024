@@ -1,36 +1,117 @@
-<div>
-    <form
-        [formGroup]="form"
-        (ngSubmit)="onSave()"
-        autocomplete="off"
-    >
-        <div class="card p-fluid">
-            <div class="p-formgrid grid">
-                <div class="field col">
-                    <label class="mr-2">Ingrese Folio</label>
-                    <input
-                        pInputText
-                        formControlName="folio"
-                        type="text"
-                    />
+<div class="card">
+    <h2 class="text-center mb-4">Pago Constancia</h2>
+
+    <form [formGroup]="payForm">
+        <!-- Datos Infractor -->
+        <p-panel header="Datos Infractor">
+            <div class="grid">
+                <div class="col-12 md:col-3">
+                    <div class="field">
+                        <label for="patente">Patente:</label>
+                        <input pInputText id="patente" formControlName="patente" class="w-full" readonly />
+                    </div>
                 </div>
-                <div class="field col">
-                    <label class="mr-2">Ingrese Orden de Pago</label>
-                    <input
-                        pInputText
-                        formControlName="orden_pago"
-                        type="text"
-                    />
+                <div class="col-12 md:col-3">
+                    <div class="field">
+                        <label for="correlativo">Correlativo MOP:</label>
+                        <input pInputText id="correlativo" formControlName="correlativoMop" class="w-full" readonly />
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field">
+                        <label for="valorUtm">Valor UTM:</label>
+                        <div class="p-inputgroup">
+                            <p-dropdown id="valorUtm" [options]="listValueUtm" formControlName="valorUtm"
+                                [optionLabel]="getUtmLabel" [style]="{'width':'100%'}" placeholder="Seleccionar UTM"
+                                (onChange)="setValuesByUtm()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field">
+                        <label for="valorUtm">Valor a Cancelar:</label>
+                        <div class="p-inputgroup">
+                            <label>${{payForm.get('valor')?.value | thousandSeparator}}</label>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div class="grid mt-3">
+                <div class="col-12 md:col-6">
+                    <div class="field">
+                        <label for="nombreCompleto">Nombre Completo:</label>
+                        <input pInputText id="nombreCompleto" formControlName="nombreCompleto" class="w-full" readonly />
+                    </div>
+                </div>
+                <div class="col-12 md:col-6">
+                    <div class="field">
+                        <label for="rut">RUT:</label>
+                        <input pInputText id="rut" formControlName="rut" class="w-full" readonly />
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+
+        <!-- Tipo de Pago -->
+        <p-panel header="Tipo de Pago" class="mt-3">
+            <div class="grid">
+                <div class="col-12">
+                    <div class="field">
+                        <label for="razonPago">Razones de Pagado:</label>
+                        <p-dropdown id="razonPago" [options]="reasonPay" formControlName="razonPago"
+                            [optionLabel]="getReasonLabel" [style]="{'width':'100%'}" placeholder="Seleccionar Razón"
+                            (onChange)="setValuesByReason()">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid mt-3">
+                <div class="col-12 md:col-3">
+                    <div class="field">
+                        <label for="folio">Folio:</label>
+                        <input pInputText id="folio" formControlName="folio" class="w-full" />
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field">
+                        <label for="ingreso">N° Ingreso:</label>
+                        <input pInputText id="ingreso" formControlName="ingreso" class="w-full" />
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field">
+                        <label for="caja">Caja:</label>
+                        <p-dropdown id="caja" [options]="paymentBox" formControlName="caja"
+                            [optionLabel]="getPaymentBoxLabel" [style]="{'width':'100%'}" placeholder="Seleccionar caja de pago">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="col-12 md:col-3">
+                    <div class="field">
+                        <label for="fechaPago">Fecha Pago:</label>
+                        <p-calendar id="fechaPago" formControlName="fechaPago"
+                            [showIcon]="true" dateFormat="dd-mm-yy" class="w-full">
+                        </p-calendar>
+                    </div>
+                </div>
+            </div>
+        </p-panel>
+
+        <!-- Observaciones -->
+        <p-panel header="Observaciones" class="mt-3">
+            <div class="field">
+                <textarea pInputTextarea formControlName="observaciones" [rows]="5" class="w-full"></textarea>
+            </div>
+        </p-panel>
+
+        <!-- Botones -->
+        <div class="flex justify-content-between mt-3">
+            <button pButton type="button" label="Volver" class="p-button-danger" (click)="onBack()"></button>
+            <button pButton type="button" label="Generar Pago" class="p-button-success"
+                (click)="onGeneratePayment()" [disabled]="!payForm.valid"></button>
         </div>
-        <br />
-        <button
-            type="submit"
-            pButton
-            pRipple
-            label="Consultar"
-            class="p-button-rounded mr-2 mb-2"
-        ></button>
     </form>
 </div>

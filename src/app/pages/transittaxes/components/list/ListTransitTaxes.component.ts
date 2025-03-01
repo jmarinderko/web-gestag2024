@@ -14,6 +14,7 @@ import { DataTransittaxes } from 'src/app/interfaces/Response.interface';
 import { DividerModule } from 'primeng/divider';
 import { ChipModule } from 'primeng/chip';
 import { PermissionsDirective } from 'src/app/shared/directives/permissions.directive';
+import { PayComponent } from 'src/app/pages/pay/pay.component';
 
 @Component({
     selector: 'app-list-transit-taxes',
@@ -28,10 +29,10 @@ import { PermissionsDirective } from 'src/app/shared/directives/permissions.dire
         ObservationTransitTaxesComponent,
         DetailtransittaxesComponent,
         CreateobservationComponent,
-        DetailpayComponent,
         DividerModule,
         ChipModule,
         PermissionsDirective,
+        PayComponent
     ],
     templateUrl: './ListTransitTaxes.component.html',
     styleUrl: './ListTransitTaxes.component.scss',

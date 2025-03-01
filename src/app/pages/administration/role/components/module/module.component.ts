@@ -38,12 +38,13 @@ export class ModuleComponent {
 
     ngOnInit(): void {
         // Inicializamos los módulos seleccionados basados en el rol seleccionado
-        this.listModules = this.listModules.map((module) => ({
-            ...module,
-            selected: !!this.rolSelected.modules.find(
-                (selected) => selected.id === module.id
-            ),
-        }));
+        console.log(this.rolSelected);
+        // this.listModules = this.listModules.map((module) => ({
+        //     ...module,
+        //     selected: !!this.rolSelected.modules.find(
+        //         (selected) => selected.id === module.id
+        //     ),
+        // }));
         this.listModuleUpdate = this.listModules.map((module) => ({
             ...module,
             selected: !!this.rolSelected.modules.find(

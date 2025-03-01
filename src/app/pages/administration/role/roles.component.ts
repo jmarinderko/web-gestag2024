@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Message, MessageService } from 'primeng/api';
+import { Message, MessageService, ConfirmationService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DividerModule } from 'primeng/divider';
 import { MessagesModule } from 'primeng/messages';
@@ -26,13 +27,14 @@ import { catchError, finalize, forkJoin, of } from 'rxjs';
         TableModule,
         DialogModule,
         MessagesModule,
+        ConfirmDialogModule,
         ModuleComponent,
         CreateRolComponent,
         PermissionsDirective,
     ],
     templateUrl: './roles.component.html',
     styleUrl: './roles.component.scss',
-    providers: [MessageService]
+    providers: [MessageService, ConfirmationService]
 })
 export class RoleComponent implements OnInit {
     // Estado del componente
@@ -40,7 +42,7 @@ export class RoleComponent implements OnInit {
     modules: Module[] = [];
     selectedRole: Role | null = null;
     loading = false;
-
+    messages: Message[] = [];
     // Estado de diálogos
     showModuleDialog = false;
     showRoleDialog = false;
@@ -48,6 +50,7 @@ export class RoleComponent implements OnInit {
     // Servicios inyectados
     private readonly roleService = inject(RoleService);
     private readonly messageService = inject(MessageService);
+    private readonly confirmationService = inject(ConfirmationService);
     private readonly destroyRef = inject(DestroyRef);
 
     ngOnInit(): void {
@@ -94,7 +97,7 @@ export class RoleComponent implements OnInit {
     /**
      * Maneja el cierre de los diálogos
      */
-    handleDialogClose(): void {
+    handleDialogClose(event: boolean): void {
         this.showRoleDialog = false;
         this.showModuleDialog = false;
         this.selectedRole = null;
@@ -121,24 +124,31 @@ export class RoleComponent implements OnInit {
      * Elimina un rol
      */
     deleteRole(role: Role): void {
-        this.roleService.deleteRole(role.id)
-            .pipe(
-                takeUntilDestroyed(this.destroyRef),
-                catchError(error => {
-                    this.showError('Error al eliminar el rol');
-                    return of(null);
-                })
-            )
-            .subscribe({
-                next: (response) => {
-                    if (response?.success) {
-                        this.showSuccess('Rol eliminado correctamente');
-                        this.loadData();
-                    } else {
-                        this.showError('Error al eliminar el rol');
-                    }
-                }
-            });
+        this.confirmationService.confirm({
+            message: '¿Está seguro que desea eliminar este rol?',
+            header: 'Confirmar eliminación',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.roleService.deleteRole(role.id)
+                    .pipe(
+                        takeUntilDestroyed(this.destroyRef),
+                        catchError(error => {
+                            this.showError('Error al eliminar el rol');
+                            return of(null);
+                        })
+                    )
+                    .subscribe({
+                        next: (response) => {
+                            if (response?.success) {
+                                this.showSuccess('Rol eliminado correctamente');
+                                this.loadData();
+                            } else {
+                                this.showError('Error al eliminar el rol');
+                            }
+                        }
+                    });
+            }
+        });
     }
 
     /**

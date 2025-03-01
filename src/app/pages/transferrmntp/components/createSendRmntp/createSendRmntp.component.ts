@@ -16,6 +16,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { RmntpService } from 'src/app/services/rmntps.service';
 import { MonthPipe } from 'src/app/shared/pipe/month.pipe';
 import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
+import { CreateSendRmntpByFormComponent } from '../createSendRmntpByForm/createSendRmntpByForm.component';
 
 @Component({
     selector: 'app-create-send-rmntp',
@@ -37,7 +38,7 @@ import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pi
         InputTextModule,
         MonthPipe,
         InputNumberModule,
-
+        CreateSendRmntpByFormComponent
         // otros módulos...
     ],
     providers: [ConfirmationService],
@@ -54,6 +55,7 @@ export class CreateSendRmntpComponent {
     qty: number = 0;
     messages: Message[] | undefined;
     rmntpService = inject(RmntpService);
+    createSendRmntpByFormDialog: boolean = false;
     constructor(private confirmationService: ConfirmationService) {}
 
     ngOnInit() {
@@ -128,9 +130,12 @@ export class CreateSendRmntpComponent {
                         .subscribe(
                             (res) => {
                                 if (res.success) {
-                                    this.sendParcialDialog = false;
-                                    this.qty = 0;
-                                    this.ngOnInit();
+                                    this.messages = [{ severity: 'success', detail: 'Operación realizada correctamente' }];
+                                    setTimeout(() => {
+                                        this.sendParcialDialog = false;
+                                        this.qty = 0;
+                                        this.ngOnInit();
+                                    }, 2000); // Espera 2 segundos antes de cerrar
                                 } else {
                                     this.messages = [
                                         {
@@ -166,6 +171,14 @@ export class CreateSendRmntpComponent {
     }
 
     createByForm(){
+        this.createSendRmntpByFormDialog = true;
+    }
 
+    closeEmiter(){
+        this.messages = [{ severity: 'success', detail: 'Operación realizada correctamente' }];
+        setTimeout(() => {
+            this.createSendRmntpByFormDialog = false;
+            this.ngOnInit();
+        }, 2000); // Espera 2 segundos antes de cerrar
     }
 }

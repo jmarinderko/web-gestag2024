@@ -6,36 +6,38 @@
     <div class="grid formgrid">
         <div class="col-12 md:col-3">
             <div class="field-checkbox">
-                <p-inputSwitch [(ngModel)]="filters.all" (onChange)="changeValueStatus('all')"></p-inputSwitch>
+                <p-inputSwitch [(ngModel)]="filters.all" (onChange)="changeFilterStatus('all')"></p-inputSwitch>
                 <label for="all">Todos</label>
             </div>
         </div>
         <div class="col-12 md:col-3">
             <div class="field-checkbox">
-                <p-inputSwitch [(ngModel)]="filters.mun" (onChange)="changeValueStatus('mun')"></p-inputSwitch>
+                <p-inputSwitch [(ngModel)]="filters.mun" (onChange)="changeFilterStatus('mun')"></p-inputSwitch>
                 <label for="mun">Municipalidad</label>
             </div>
         </div>
         <div class="col-12 md:col-3">
             <div class="field-checkbox">
-                <p-inputSwitch [(ngModel)]="filters.jpl" (onChange)="changeValueStatus('jpl')"></p-inputSwitch>
+                <p-inputSwitch [(ngModel)]="filters.jpl" (onChange)="changeFilterStatus('jpl')"></p-inputSwitch>
                 <label for="jpl">Juzgado</label>
             </div>
         </div>
         <div class="col-12 md:col-3">
             <div class="field-checkbox">
-                <p-inputSwitch [(ngModel)]="filters.rmntp" (onChange)="changeValueStatus('rmntp')"></p-inputSwitch>
+                <p-inputSwitch [(ngModel)]="filters.rmntp" (onChange)="changeFilterStatus('rmntp')"></p-inputSwitch>
                 <label for="rmntp">RMNTP</label>
             </div>
         </div>
     </div>
     <p-divider></p-divider>
     <p-table
-        #dt1
-        [value]="listfilteredReasons"
+        #dt
+        [value]="filteredReasons"
         dataKey="id"
         [paginator]="true"
         [rows]="10"
+        styleClass="p-datatable-gridlines"
+        [rowHover]="true"
         [loading]="loading"
     >
         <ng-template pTemplate="header">
@@ -62,7 +64,7 @@
                         class="p-button-rounded p-button-success mr-2"
                         pTooltip="Modificar"
                         tooltipPosition="top"
-                        (click)="update(list)"
+                        (click)="updateReasonStatus(list)"
                     ></button>
                 </td>
             </tr>
@@ -74,20 +76,25 @@
         </ng-template>
     </p-table>
 </p-panel>
-@if (showLoad) {
-    <p-dialog header="Header" [(visible)]="showLoad" [style]="{width: '1000px'}" [position]="'right'" [modal]="true" class="p-fluid">
-        <ng-template pTemplate="header">
-            <div class="inline-flex align-items-center justify-content-center gap-2">
-                <span class="font-bold white-space-nowrap">
-                    {{ reasonSelected ? 'Editar Estado de Causa' : 'Nuevo Estado de Causa' }}
-                </span>
-            </div>
-        </ng-template>
-        <app-create-reason
-            [reasonSelected]="reasonSelected"
-            [entities]="entities"
-            [listReasons]="listReasons"
-            (closeEmiter)="closeEmiter($event)"
-        ></app-create-reason>
-    </p-dialog>
-}
+
+<p-dialog
+    [(visible)]="showLoadDialog"
+    [style]="{width: '1000px'}"
+    [position]="'right'"
+    [modal]="true"
+    class="p-fluid"
+>
+    <ng-template pTemplate="header">
+        <div class="inline-flex align-items-center justify-content-center gap-2">
+            <span class="font-bold white-space-nowrap">
+                {{ selectedReason ? 'Editar Estado de Causa' : 'Nuevo Estado de Causa' }}
+            </span>
+        </div>
+    </ng-template>
+    <app-create-reason
+        [reasonSelected]="selectedReason"
+        [entities]="entities"
+        [listReasons]="reasons"
+        (closeEmiter)="closeEmiter($event)"
+    ></app-create-reason>
+</p-dialog>
