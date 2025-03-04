@@ -33,13 +33,13 @@ export class HomeComponent {
     dataCardjpl: Cardinfo = null;
     options: any;
     constructor(private cdRef: ChangeDetectorRef) {
-        console.log('constructor');
+        // console.log('constructor');
         this.loadInfoJpl();
         this.LoadInfoMun();
     }
 
     LoadInfoMun() {
-        console.log(this.dataCard);
+        // console.log(this.dataCard);
         this.homeServices.getInfoCardmun().subscribe((res) => {
             this.dataCard = res.data;
             this.cdRef.detectChanges();
@@ -47,7 +47,7 @@ export class HomeComponent {
     }
 
     loadInfoJpl() {
-        console.log(this.dataCardjpl);
+        // console.log(this.dataCardjpl);
         this.homeServices.getInfoCardjpl().subscribe((res) => {
             this.dataCardjpl = res.data;
             this.cdRef.detectChanges();

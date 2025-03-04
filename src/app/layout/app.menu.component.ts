@@ -220,7 +220,7 @@ export class AppMenuComponent implements OnInit {
         //     this.user.modules = response.data;
         // });
 
-        console.log(this.user);
+        // console.log(this.user);
         this.model = [
             {
                 label: 'Home',

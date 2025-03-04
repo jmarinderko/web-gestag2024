@@ -1,21 +1,25 @@
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, inject } from '@angular/core';
-import { ButtonModule } from 'primeng/button';
-import { DividerModule } from 'primeng/divider';
-import { TableModule } from 'primeng/table';
-import { TooltipModule } from 'primeng/tooltip';
-import { TransferAvailable } from 'src/app/interfaces/Transfer.interface';
-import { TransferService } from 'src/app/services/transfer.service';
-import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DialogModule } from 'primeng/dialog';
-import { DropdownModule } from 'primeng/dropdown';
-import { Entity } from 'src/app/interfaces/Entity.interface';
+import { ButtonModule } from 'primeng/button';
+import { TableModule } from 'primeng/table';
 import { MessagesModule } from 'primeng/messages';
-import { Message } from 'primeng/api';
+import { MessageModule } from 'primeng/message';
+import { DropdownModule } from 'primeng/dropdown';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { TransitTaxe } from 'src/app/interfaces/TransitTaxe.interface';
+import { ConfirmationService, Message } from 'primeng/api';
+import { MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { Router } from '@angular/router';
+import { TransferService } from 'src/app/services/transfer.service';
+import { ThousandSeparatorPipe } from 'src/app/shared/pipe/thousand-separator.pipe';
+import { Entity } from 'src/app/interfaces/Entity.interface';
+import { TransferAvailable } from 'src/app/interfaces/Transfer.interface';
+import { DialogModule } from 'primeng/dialog';
+import { DividerModule } from 'primeng/divider';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
     selector: 'app-generation-transfer-component',
@@ -23,20 +27,26 @@ import { TransitTaxe } from 'src/app/interfaces/TransitTaxe.interface';
     imports: [
         CommonModule,
         ThousandSeparatorPipe,
+        FormsModule,
+        ReactiveFormsModule,
         ButtonModule,
         TableModule,
+        MessagesModule,
+        MessageModule,
+        DropdownModule,
+        CheckboxModule,
+        InputTextModule,
+        DialogModule,
         DividerModule,
         TooltipModule,
-        DialogModule,
-        FormsModule,
-        DropdownModule,
-        MessagesModule,
-        CheckboxModule,
-        ReactiveFormsModule,
-        InputTextModule,
+        ConfirmDialogModule
+    ],
+    providers: [
+        ConfirmationService,
+        MessageService
     ],
     templateUrl: './generation.component.html',
-    styleUrl: './generation.component.scss',
+    styleUrls: ['./generation.component.scss'],
 })
 export class GenerationComponent implements OnInit {
     transferService = inject(TransferService);
@@ -64,7 +74,7 @@ export class GenerationComponent implements OnInit {
         correlativo_mop: [''],
     });
 
-    constructor(private fb: FormBuilder) {
+    constructor(private fb: FormBuilder, private confirmationService: ConfirmationService, private messageService: MessageService, private router: Router) {
         this.messages = [
             {
                 severity: 'info',
@@ -232,30 +242,59 @@ export class GenerationComponent implements OnInit {
     }
 
     submitForm() {
-        if (this.selectedItem.length === 0) {
-            this.messagesform = [
-                {
-                    severity: 'error',
-                    detail: 'Debe seleccionar al menos un item',
-                },
-            ];
+        if (!this.selectedCourt) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Debe seleccionar un juzgado'
+            });
             return;
         }
 
-        this.transferService
-            .generateByForm({
-                idCourt: this.selectedCourt.id,
-                data: this.selectedItem,
-            })
-            .subscribe((res) => {
-                this.load();
-                this.cancelForm();
-                this.messagesResponse = [
-                    {
-                        severity: 'success',
-                        detail: 'Se genero correctamente el traspaso a JPL',
-                    },
-                ];
+        if (this.selectedItem.length === 0) {
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Error',
+                detail: 'Debe seleccionar al menos una constancia'
             });
+            return;
+        }
+
+        this.confirmationService.confirm({
+            message: '¿Está seguro de generar la transferencia?',
+            header: 'Confirmación de Transferencia',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.transferService
+                    .generateByForm({
+                        idCourt: this.selectedCourt.id,
+                        transitTaxes: this.selectedItem.map((item) => item.id),
+                    })
+                    .subscribe({
+                        next: (response) => {
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: 'Éxito',
+                                detail: 'Transferencia generada correctamente'
+                            });
+                            this.router.navigate(['transfer/completed']);
+                        },
+                        error: (error) => {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Error',
+                                detail: 'Error al generar la transferencia'
+                            });
+                        },
+                    });
+            },
+            reject: () => {
+                this.messageService.add({
+                    severity: 'info',
+                    summary: 'Cancelado',
+                    detail: 'Operación cancelada'
+                });
+            }
+        });
     }
 }

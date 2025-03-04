@@ -190,7 +190,7 @@
     ></app-observation-transittaxes>
 </p-dialog>
 
-<p-dialog *ngIf="showPay" [(visible)]="showPay" [style]="{width: '1000px'}" [position]="'right'" [modal]="true" class="p-fluid">
+<p-dialog *ngIf="showPay" header="Pago Constancia" [(visible)]="showPay" [style]="{width: '1000px'}" [position]="'right'" [modal]="true" class="p-fluid">
     <app-transitaxes-pay
         [transitaxe]="transittaxesSelected"
         (emitterClose)="closePay($event)"

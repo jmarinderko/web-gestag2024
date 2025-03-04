@@ -30,6 +30,6 @@ export class CardinfoComponent {
     @Input() data: any;
     constructor() {}
     ngOnInit() {
-        console.log(this.data);
+        // console.log(this.data);
     }
 }
